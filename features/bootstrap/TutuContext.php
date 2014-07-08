@@ -84,16 +84,4 @@ class TutuContext extends \Behat\MinkExtension\Context\RawMinkContext implements
         $this->tutuProcess->start();
         sleep(1);
     }
-
-    /**
-     * @When http client send :method request on :arg1
-     */
-    public function httpClientSendGetRequestOn($method, $url)
-    {
-        $session = $this->getSession();
-
-        $client = $session->getDriver()->getClient();
-        $client->followRedirects(false);
-        $client->request($method, $url);
-    }
 }

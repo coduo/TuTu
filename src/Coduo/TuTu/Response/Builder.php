@@ -37,7 +37,7 @@ class Builder
      */
     public function buildForMismatch(Request $request)
     {
-        $content = sprintf('TuTu don\'t know how to response for \"%s\" \"%s\" request :(', $request->getMethod(), $request->getRequestUri());
+        $content = sprintf('TuTu don\'t know how to response for "%s" "%s" request :(', $request->getMethod(), $request->getRequestUri());
         return new Response(
             $content,
             404,

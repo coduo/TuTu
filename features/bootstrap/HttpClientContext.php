@@ -85,4 +85,32 @@ class HttpClientContext extends RawMinkContext implements SnippetAcceptingContex
             }
         }
     }
+
+
+    /**
+     * @When http client send :method request on :arg1
+     */
+    public function httpClientSendGetRequestOn($method, $url)
+    {
+        $session = $this->getSession();
+
+        $client = $session->getDriver()->getClient();
+        $client->followRedirects(false);
+        $client->request($method, $url);
+    }
+
+    /**
+     * @When http client send :method request on :arg1 with following parameters:
+     */
+    public function httpClientSendPostRequestOnWithFollowingParameters($method, $url, TableNode $parametersTable)
+    {
+        $session = $this->getSession();
+        $parameters = [];
+        foreach ($parametersTable->getHash() as $parameterData) {
+            $parameters[$parameterData['Parameter']] = $parameterData['Value'];
+        }
+        $client = $session->getDriver()->getClient();
+        $client->followRedirects(false);
+        $client->request($method, $url, $parameters);
+    }
 }
