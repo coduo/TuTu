@@ -31,7 +31,7 @@ class HttpClientContext extends RawMinkContext implements SnippetAcceptingContex
     }
 
     /**
-     * @Then response status code should be :arg1
+     * @Then response status code should be :expectedStatus
      */
     public function responseStatusCodeShouldBe($expectedStatus)
     {
@@ -88,7 +88,7 @@ class HttpClientContext extends RawMinkContext implements SnippetAcceptingContex
 
 
     /**
-     * @When http client send :method request on :arg1
+     * @When http client send :method request on :url
      */
     public function httpClientSendGetRequestOn($method, $url)
     {
@@ -100,7 +100,7 @@ class HttpClientContext extends RawMinkContext implements SnippetAcceptingContex
     }
 
     /**
-     * @When http client send :method request on :arg1 with following parameters:
+     * @When http client send :method request on :url with following parameters:
      */
     public function httpClientSendPostRequestOnWithFollowingParameters($method, $url, TableNode $parametersTable)
     {

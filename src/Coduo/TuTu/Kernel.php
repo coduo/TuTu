@@ -1,6 +1,6 @@
 <?php
 
-namespace Coduo\Tutu;
+namespace Coduo\TuTu;
 
 use Coduo\TuTu\Response\Builder;
 use Coduo\TuTu\Response\Config\YamlLoader;

@@ -4,12 +4,11 @@ php:
   - 5.4
   - 5.5
   - 5.6
-  
+
 before_script:
   - composer self-update
   - composer install
-  - php -S localhost:8000 web/index.php &
 
 script:
-  - ./vendor/bin/phpspec run -v
-  - ./vendor/bin/behat --no-snippets --no-paths --verbose --format=progress -vvv
+  - ./bin/phpspec run -v
+  - ./bin/behat --verbose
