@@ -1,0 +1,5 @@
+/config/responses.yml
+/var/*
+!/var/.gitkeep
+/vendor/
+/composer.phar

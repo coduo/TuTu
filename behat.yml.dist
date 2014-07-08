@@ -1,0 +1,11 @@
+default:
+    extensions:
+        Behat\MinkExtension:
+            goutte: ~
+    suites:
+        tutu:
+            paths:    [ %paths.base%/features ]
+            contexts:
+                - TutuContext:
+                    webPath: %paths.base%/web
+                - HttpClientContext
