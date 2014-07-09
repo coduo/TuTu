@@ -13,7 +13,7 @@ $ git clone git@github.com:coduo/TuTu.git
 
 ### Create responses for specific requests
 
-TuTu can create any response for specific request but you need to learn him how to do it.
+TuTu can create any response for specific request but you need to teach him how to do it.
 In order to do that you need to prepare simple ``responses.yml`` yaml file.
 
 ```
