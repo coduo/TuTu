@@ -1,6 +1,6 @@
 <?php
 
-use Coduo\Tutu\Kernel;
+use Coduo\TuTu\Kernel;
 use Pimple\Container;
 use Symfony\Component\HttpFoundation\Request;
 

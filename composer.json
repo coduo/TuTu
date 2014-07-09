@@ -2,11 +2,9 @@
     "name": "coduo/tutu",
     "license": "MIT",
     "type": "project",
-    "description": "TuTu - simple PHP Api mocking tool.",
+    "description": "TuTu - simple HTTP server mocking tool in PHP.",
     "autoload": {
-        "psr-0": {
-            "Coduo\\": "src/"
-        }
+        "psr-0": { "": "src/" }
     },
     "require": {
         "php": ">=5.4.0",
@@ -18,7 +16,6 @@
         "behat/behat": "3.0.*",
         "behat/mink-extension": "~2.0@dev",
         "behat/mink-goutte-driver": "~1.0@dev",
-        "behat/symfony2-extension": "~2.0@dev",
         "phpspec/phpspec": "2.0.*",
         "symfony/filesystem": "~2.3",
         "symfony/process": "~2.3",

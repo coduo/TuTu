@@ -71,7 +71,7 @@ class TutuContext extends \Behat\MinkExtension\Context\RawMinkContext implements
     }
 
     /**
-     * @Given TuTu is running on host :arg1 at port :arg2
+     * @Given TuTu is running on host :host at port :port
      */
     public function tutuIsRunningOnHostAtPort($host, $port)
     {
