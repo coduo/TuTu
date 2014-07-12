@@ -5,11 +5,13 @@ It can be used to simulate any kind of web application behavior. We are going to
 
 ## How to use it
 
-### Clone project from github
+### Install with composer
 
 ```
-$ git clone git@github.com:coduo/TuTu.git
+$ composer create-project coduo/tutu --stability=dev
 ```
+
+**TuTu is still under development that's why you need to set stability to dev**
 
 ### Create responses for specific requests
 
@@ -17,7 +19,7 @@ TuTu can create any response for specific request but you need to teach him how 
 In order to do that you need to prepare simple ``responses.yml`` yaml file.
 
 ```
-$ cd TuTu
+$ cd tutu
 $ cp config/responses.yml.dist config/responses.dist
 ```
 
@@ -36,7 +38,7 @@ hello_world:
 You can use php build in webserver to run TuTu
 
 ```
-$ web
+$ cd web
 $ php -S localhost:8000
 ```
 
