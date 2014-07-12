@@ -9,6 +9,7 @@
     "require": {
         "php": ">=5.4.0",
         "symfony/http-kernel": "~2.3",
+        "symfony/options-resolver": "~2.3",
         "pimple/pimple": "~2.1",
         "twig/twig": "1.*"
     },

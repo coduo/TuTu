@@ -2,7 +2,9 @@
 
 namespace Coduo\TuTu\Response;
 
-class ResponseConfig
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+final class ResponseConfig
 {
     /**
      * @var
@@ -49,22 +51,10 @@ class ResponseConfig
 
     public static function fromArray(array $arrayConfig)
     {
-        if (!array_key_exists('path', $arrayConfig)) {
-            throw new \InvalidArgumentException("Can't create response without path.");
-        }
-        $responseConfig = new static($arrayConfig['path']);
-        if (array_key_exists('methods', $arrayConfig) && is_array($arrayConfig['methods'])) {
-            $responseConfig->setAllowedMethods($arrayConfig['methods']);
-        }
-        if (array_key_exists('content', $arrayConfig)) {
-            $responseConfig->content = $arrayConfig['content'];
-        }
-        if (array_key_exists('status', $arrayConfig)) {
-            $responseConfig->status = $arrayConfig['status'];
-        }
-        if (array_key_exists('headers', $arrayConfig) && is_array($arrayConfig['headers'])) {
-            $responseConfig->headers = $arrayConfig['headers'];
-        }
+        $configResolver = self::createArrayConfigResolver();
+        $config = $configResolver->resolve($arrayConfig);
+        $responseConfig = new ResponseConfig($config['path'], $config['content'], $config['status'], $config['headers']);
+        $responseConfig->setAllowedMethods($config['methods']);
 
         return $responseConfig;
     }
@@ -157,5 +147,24 @@ class ResponseConfig
     {
         $routePattern = preg_replace('/{id}/', '__PLACEHOLDER__', $this->trimRoute($route));
         return '/^' . preg_replace('/__PLACEHOLDER__/', '([^\/]*)', preg_quote($routePattern, '/')) . '$/';;
+    }
+
+    /**
+     * @return OptionsResolver
+     */
+    private static function createArrayConfigResolver()
+    {
+        $configResolver = new OptionsResolver();
+        $configResolver->setRequired(['path']);
+        $configResolver->setDefaults(['content' => '', 'status' => 200, 'headers' => [], 'methods' => []]);
+        $configResolver->setAllowedTypes([
+            'path' => 'string',
+            'content' => 'string',
+            'status' => 'integer',
+            'headers' => 'array',
+            'methods' => 'array'
+        ]);
+
+        return $configResolver;
     }
 }
