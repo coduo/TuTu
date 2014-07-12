@@ -4,7 +4,8 @@ Feature: Create response when cant match request
   I expect response with constant message and specific header in such situation
 
   Scenario: Create response when cant match request
-    Given TuTu is running on host "localhost" at port "8000"
+    Given there is a empy file "responses.yml"
+    And TuTu is running on host "localhost" at port "8000"
     When http client send GET request on "http://localhost:8000/hello/world"
     Then response status code should be 404
     And the response content should be equal to:
@@ -23,7 +24,7 @@ Feature: Create response when cant match request
       content: |
         Hello {% rwqrqwr %}
     """
-    Given TuTu is running on host "localhost" at port "8000"
+    And TuTu is running on host "localhost" at port "8000"
     When http client send GET request on "http://localhost:8000/hello/world"
     Then response status code should be 500
     And the response content should be equal to:

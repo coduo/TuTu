@@ -31,23 +31,52 @@ class ResponseConfig
 
     /**
      * @param $route
-     * @param array $methods
      * @param string $content
      * @param int $status
      * @param array $headers
+     * @internal param array $methods
      */
-    public function __construct($route, array $methods = [], $content = '', $status = 200, $headers = [])
+    public function __construct($route, $content = '', $status = 200, $headers = [])
     {
         $this->validateRoute($route);
 
-        $routePattern = $this->buildRoutePattern($route);
-        $this->routePattern = $routePattern;
-        $this->methods = array_map(function ($method) {
-            return strtoupper($method);
-        }, $methods);
+        $this->routePattern = $this->buildRoutePattern($route);;
+        $this->methods = [];
         $this->content = $content;
         $this->status = (int) $status;
         $this->headers = $headers;
+    }
+
+    public static function fromArray(array $arrayConfig)
+    {
+        if (!array_key_exists('path', $arrayConfig)) {
+            throw new \InvalidArgumentException("Can't create response without path.");
+        }
+        $responseConfig = new static($arrayConfig['path']);
+        if (array_key_exists('methods', $arrayConfig) && is_array($arrayConfig['methods'])) {
+            $responseConfig->setAllowedMethods($arrayConfig['methods']);
+        }
+        if (array_key_exists('content', $arrayConfig)) {
+            $responseConfig->content = $arrayConfig['content'];
+        }
+        if (array_key_exists('status', $arrayConfig)) {
+            $responseConfig->status = $arrayConfig['status'];
+        }
+        if (array_key_exists('headers', $arrayConfig) && is_array($arrayConfig['headers'])) {
+            $responseConfig->headers = $arrayConfig['headers'];
+        }
+
+        return $responseConfig;
+    }
+
+    /**
+     * @param $methods
+     */
+    public function setAllowedMethods($methods)
+    {
+        $this->methods = array_map(function ($method) {
+            return strtoupper($method);
+        }, $methods);
     }
 
     /**

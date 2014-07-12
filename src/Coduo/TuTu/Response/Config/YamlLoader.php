@@ -2,27 +2,31 @@
 
 namespace Coduo\TuTu\Response\Config;
 
-use Coduo\TuTu\Response\ResponseConfig;
 use Symfony\Component\Yaml\Yaml;
 
-class YamlLoader
+class YamlLoader implements Loader
 {
-    private $configYamlPath;
+    private $responsesYamlPath;
 
     /**
-     * @param [] $yamlFileContent
+     * @param $responsesYamlPath
+     * @throws \InvalidArgumentException
+     * @internal param $ [] $yamlFileContent
      */
-    public function __construct($applicationRootPath)
+    public function __construct($responsesYamlPath)
     {
-        $this->configYamlPath = $applicationRootPath . '/config/responses.yml';
-    }
-
-    public function getConfigurationArray()
-    {
-        if (file_exists($this->configYamlPath)) {
-            return Yaml::parse($this->configYamlPath);
+        if (!file_exists($responsesYamlPath)) {
+            throw new \InvalidArgumentException(sprintf("File \"%s\" does not exist.", $responsesYamlPath));
         }
 
-        return [];
+        $this->responsesYamlPath = $responsesYamlPath;
+    }
+
+    /**
+     * @return array
+     */
+    public function getResponsesArray()
+    {
+        return Yaml::parse($this->responsesYamlPath);
     }
 }
