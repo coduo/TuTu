@@ -53,6 +53,15 @@ class HttpClientContext extends RawMinkContext implements SnippetAcceptingContex
     }
 
     /**
+     * @Then the response content should match expression:
+     */
+    public function theResponseContentShouldMatchExpression(PyStringNode $pattern)
+    {
+        $content = $this->getSession()->getDriver()->getContent();
+        expect($content)->toMatch('/'.$pattern.'/');
+    }
+
+    /**
      * @Then the response content should be empty
      */
     public function theResponseContentShouldBeEmpty()

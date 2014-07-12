@@ -69,3 +69,28 @@ As you can see there are few was to customize TuTu responses.
 * ``headers`` - optional. Headers added to response Must be a valid array
 
 In content template you have access to all twig features. You can also use ``request`` variable to access request data.
+
+## Extensions
+
+Because there is no such thing as perfect tool TuTu allows you to create extensions.
+To enable extension you just need to prepare ``config.yml`` file.
+
+```yml
+# config/config.yml
+extensions:
+    Coduo\TuTu\Extension\Faker: ~
+```
+
+Above example show how to load Faker extension (available in this repository).
+You can also pass arguments to extension during initialization.
+
+```yml
+# config/config.yml
+extensions:
+    Coduo\TuTu\Extension\Faker:
+        - "pl_PL"
+```
+
+In above example extension ``Coduo\TuTu\Extension\Faker`` is going to be created with one argument with value "pl_PL".
+
+**Keep in mind that Faker extension is available in TuTu by default. You don't need to enable it manually.**
