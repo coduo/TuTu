@@ -2,6 +2,7 @@
 
 namespace Coduo\TuTu\Response;
 
+use Coduo\TuTu\Response\Config\Loader;
 use Symfony\Component\HttpFoundation\Request;
 
 class ConfigResolver
@@ -11,24 +12,19 @@ class ConfigResolver
      */
     protected $configs;
 
-    public function __construct()
+    public function __construct(Loader $loader)
     {
         $this->configs = [];
-    }
-
-    /**
-     * @param ResponseConfig $config
-     */
-    public function addResponseConfig(ResponseConfig $config)
-    {
-        $this->configs[] = $config;
+        foreach ($loader->getResponsesArray() as $responseArrayConfig) {
+            $this->configs[] = ResponseConfig::fromArray($responseArrayConfig);
+        }
     }
 
     /**
      * @param Request $request
      * @return null
      */
-    public function resolveResponse(Request $request)
+    public function resolveResponseConfig(Request $request)
     {
         foreach ($this->configs as $config) {
             if ($config->isMethodAllowed($request->getMethod())) {

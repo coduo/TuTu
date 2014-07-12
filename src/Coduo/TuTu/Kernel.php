@@ -36,7 +36,7 @@ class Kernel implements HttpKernelInterface
     public function handle(Request $request, $type = self::MASTER_REQUEST, $catch = true)
     {
         try {
-            $responseConfig = $this->container['response.resolver']->resolveResponse($request);
+            $responseConfig = $this->container['response.config.resolver']->resolveResponseConfig($request);
             if (isset($responseConfig)) {
                 return $this->container['response.builder']->build($responseConfig, $request);
             }
@@ -49,9 +49,8 @@ class Kernel implements HttpKernelInterface
     private function setUpContainer()
     {
         $this->registerTwig();
-        $this->registerConfigLoaders();
-        $this->registerConfig();
-        $this->registerResponseResolver();
+        $this->registerConfigLoader();
+        $this->registerResponseConfigResolver();
         $this->registerResponseBuilder();
     }
 
@@ -67,31 +66,18 @@ class Kernel implements HttpKernelInterface
         };
     }
 
-
-    private function registerConfigLoaders()
+    private function registerConfigLoader()
     {
+        $this->container['response.config.yaml.path'] = $this->container['tutu.root_path'] . '/config/responses.yml';
         $this->container['response.config.loader.yaml'] = function ($container) {
-            return new YamlLoader($container['tutu.root_path']);
+            return new YamlLoader($container['response.config.yaml.path']);
         };
     }
 
-    private function registerConfig()
+    private function registerResponseConfigResolver()
     {
-        $this->container['response.config'] = function ($container) {
-            $configArray = $container['response.config.loader.yaml']->getConfigurationArray();
-            return new Config($configArray);
-        };
-    }
-
-    private function registerResponseResolver()
-    {
-        $this->container['response.resolver'] = function ($container) {
-            $resolver = new ConfigResolver();
-            foreach ($container['response.config']->getConfiguration() as $responseConfig) {
-                $resolver->addResponseConfig($responseConfig);
-            }
-
-            return $resolver;
+        $this->container['response.config.resolver'] = function ($container) {
+            return new ConfigResolver($container['response.config.loader.yaml']);
         };
     }
 

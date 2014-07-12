@@ -2,7 +2,9 @@
 
 namespace Coduo\TuTu\Response;
 
-class ResponseConfig
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+final class ResponseConfig
 {
     /**
      * @var
@@ -31,23 +33,40 @@ class ResponseConfig
 
     /**
      * @param $route
-     * @param array $methods
      * @param string $content
      * @param int $status
      * @param array $headers
+     * @internal param array $methods
      */
-    public function __construct($route, array $methods = [], $content = '', $status = 200, $headers = [])
+    public function __construct($route, $content = '', $status = 200, $headers = [])
     {
         $this->validateRoute($route);
 
-        $routePattern = $this->buildRoutePattern($route);
-        $this->routePattern = $routePattern;
-        $this->methods = array_map(function ($method) {
-            return strtoupper($method);
-        }, $methods);
+        $this->routePattern = $this->buildRoutePattern($route);;
+        $this->methods = [];
         $this->content = $content;
         $this->status = (int) $status;
         $this->headers = $headers;
+    }
+
+    public static function fromArray(array $arrayConfig)
+    {
+        $configResolver = self::createArrayConfigResolver();
+        $config = $configResolver->resolve($arrayConfig);
+        $responseConfig = new ResponseConfig($config['path'], $config['content'], $config['status'], $config['headers']);
+        $responseConfig->setAllowedMethods($config['methods']);
+
+        return $responseConfig;
+    }
+
+    /**
+     * @param $methods
+     */
+    public function setAllowedMethods($methods)
+    {
+        $this->methods = array_map(function ($method) {
+            return strtoupper($method);
+        }, $methods);
     }
 
     /**
@@ -128,5 +147,24 @@ class ResponseConfig
     {
         $routePattern = preg_replace('/{id}/', '__PLACEHOLDER__', $this->trimRoute($route));
         return '/^' . preg_replace('/__PLACEHOLDER__/', '([^\/]*)', preg_quote($routePattern, '/')) . '$/';;
+    }
+
+    /**
+     * @return OptionsResolver
+     */
+    private static function createArrayConfigResolver()
+    {
+        $configResolver = new OptionsResolver();
+        $configResolver->setRequired(['path']);
+        $configResolver->setDefaults(['content' => '', 'status' => 200, 'headers' => [], 'methods' => []]);
+        $configResolver->setAllowedTypes([
+            'path' => 'string',
+            'content' => 'string',
+            'status' => 'integer',
+            'headers' => 'array',
+            'methods' => 'array'
+        ]);
+
+        return $configResolver;
     }
 }

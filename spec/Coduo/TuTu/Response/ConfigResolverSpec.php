@@ -2,21 +2,32 @@
 
 namespace spec\Coduo\TuTu\Response;
 
-use Coduo\TuTu\Response\ResponseConfig;
+use Coduo\TuTu\Response\Config\Loader;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Symfony\Component\HttpFoundation\Request;
 
 class ConfigResolverSpec extends ObjectBehavior
 {
-    function it_resolve_config_when_method_and_request_uri_fits_configuration(Request $request)
+    function let(Loader $loader)
     {
+        $loader->getResponsesArray()->willReturn([]);
+        $this->beConstructedWith($loader);
+    }
+
+    function it_resolve_config_when_method_and_request_uri_fits_configuration(Request $request, Loader $loader)
+    {
+        $loader->getResponsesArray()->willReturn([
+            [
+                'path' => '/foo/index',
+                'methods' => ['POST']
+            ]
+        ]);
+
         $request->getMethod()->willReturn('POST');
         $request->getPathInfo()->willReturn('/foo/index');
-        $config = new ResponseConfig('/foo/index', ['POST']);
-        $this->addResponseConfig($config);
 
-        $this->resolveResponse($request)->shouldReturn($config);
+        $this->resolveResponseConfig($request)->shouldReturnAnInstanceOf('Coduo\TuTu\Response\ResponseConfig');
     }
 
     function it_return_null_when_cant_resolve_response_config(Request $request)
@@ -24,6 +35,6 @@ class ConfigResolverSpec extends ObjectBehavior
         $request->getMethod()->willReturn('POST');
         $request->getPathInfo()->willReturn('/foo/index');
 
-        $this->resolveResponse($request)->shouldReturn(null);
+        $this->resolveResponseConfig($request)->shouldReturn(null);
     }
 }

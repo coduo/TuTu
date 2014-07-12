@@ -57,6 +57,14 @@ class TutuContext extends \Behat\MinkExtension\Context\RawMinkContext implements
     }
 
     /**
+     * @Given there is a empy file "responses.yml"
+     */
+    public function thereIsAEmpyFile()
+    {
+        $this->thereIsARoutingFileWithFollowingContent(new PyStringNode([], 0));
+    }
+
+    /**
      * @Given there is a routing file "responses.yml" with following content:
      */
     public function thereIsARoutingFileWithFollowingContent(PyStringNode $fileContent)

@@ -41,7 +41,7 @@ class ResponseConfigSpec extends ObjectBehavior
 
     function it_can_be_created_only_for_specific_methods()
     {
-        $this->beConstructedWith('/foo', ['POST']);
+        $this->setAllowedMethods(['POST']);
         $this->isMethodAllowed('POST')->shouldReturn(true);
         $this->isMethodAllowed('GET')->shouldReturn(false);
     }
@@ -55,13 +55,13 @@ class ResponseConfigSpec extends ObjectBehavior
 
     function it_always_uppercase_allowed_methods()
     {
-        $this->beConstructedWith('/foo', ['post']);
+        $this->setAllowedMethods(['post']);
         $this->isMethodAllowed('POST')->shouldReturn(true);
     }
 
     function it_uppercase_method_during_check()
     {
-        $this->beConstructedWith('/foo', ['POST']);
+        $this->setAllowedMethods(['POST']);
         $this->isMethodAllowed('post')->shouldReturn(true);
     }
 }
