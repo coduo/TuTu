@@ -4,8 +4,52 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ca289b58d368c2a1fb073b4a43a1801f",
+    "hash": "2648ba28a3196e0645db32130b604273",
     "packages": [
+        {
+            "name": "coduo/tutu-faker-extension",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/coduo/tutu-faker-extension.git",
+                "reference": "b8695289dcfbe0de5c6cb986dbd5138b039fb5a2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/coduo/tutu-faker-extension/zipball/b8695289dcfbe0de5c6cb986dbd5138b039fb5a2",
+                "reference": "b8695289dcfbe0de5c6cb986dbd5138b039fb5a2",
+                "shasum": ""
+            },
+            "require": {
+                "fzaninotto/faker": "~1.0",
+                "php": ">=5.4.0",
+                "twig/twig": "1.*"
+            },
+            "require-dev": {
+                "behat/behat": "3.0.*",
+                "behat/mink-extension": "~2.0@dev",
+                "behat/mink-goutte-driver": "~1.0@dev",
+                "bossa/phpspec2-expect": "dev-master",
+                "coduo/tutu": "1.0.*@dev"
+            },
+            "type": "project",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "This extensions integrates fzaninotto/faker with TuTu.",
+            "time": "2014-07-12 18:04:29"
+        },
         {
             "name": "fzaninotto/faker",
             "version": "v1.4.0",
@@ -2002,6 +2046,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
+        "coduo/tutu-faker-extension": 20,
         "behat/mink-extension": 20,
         "behat/mink-goutte-driver": 20,
         "bossa/phpspec2-expect": 20

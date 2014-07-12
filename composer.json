@@ -11,8 +11,8 @@
         "symfony/http-kernel": "~2.3",
         "symfony/options-resolver": "~2.3",
         "pimple/pimple": "~2.1",
-        "fzaninotto/faker": "~1.0",
-        "twig/twig": "1.*"
+        "twig/twig": "1.*",
+        "coduo/tutu-faker-extension": "1.0.*@dev"
     },
     "require-dev": {
         "behat/behat": "3.0.*",
