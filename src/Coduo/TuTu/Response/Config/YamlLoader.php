@@ -27,6 +27,7 @@ class YamlLoader implements Loader
      */
     public function getResponsesArray()
     {
-        return Yaml::parse(file_get_contents($this->responsesYamlPath));
+        $config = Yaml::parse(file_get_contents($this->responsesYamlPath));
+        return is_array($config) ? $config : [];
     }
 }
