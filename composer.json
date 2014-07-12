@@ -11,6 +11,7 @@
         "symfony/http-kernel": "~2.3",
         "symfony/options-resolver": "~2.3",
         "pimple/pimple": "~2.1",
+        "fzaninotto/faker": "~1.0",
         "twig/twig": "1.*"
     },
     "require-dev": {

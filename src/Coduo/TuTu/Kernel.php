@@ -2,6 +2,7 @@
 
 namespace Coduo\TuTu;
 
+use Coduo\TuTu\Extension\Initializer;
 use Coduo\TuTu\Response\Builder;
 use Coduo\TuTu\Response\Config\YamlLoader;
 use Coduo\TuTu\Response\Config;
@@ -10,6 +11,7 @@ use Pimple\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Yaml\Yaml;
 
 class Kernel implements HttpKernelInterface
 {
@@ -36,6 +38,8 @@ class Kernel implements HttpKernelInterface
     public function handle(Request $request, $type = self::MASTER_REQUEST, $catch = true)
     {
         try {
+            $this->loadConfiguration();
+
             $responseConfig = $this->container['response.config.resolver']->resolveResponseConfig($request);
             if (isset($responseConfig)) {
                 return $this->container['response.builder']->build($responseConfig, $request);
@@ -49,6 +53,7 @@ class Kernel implements HttpKernelInterface
     private function setUpContainer()
     {
         $this->registerTwig();
+        $this->registerExtensionInitializer();
         $this->registerConfigLoader();
         $this->registerResponseConfigResolver();
         $this->registerResponseBuilder();
@@ -63,6 +68,13 @@ class Kernel implements HttpKernelInterface
             ));
 
             return $twig;
+        };
+    }
+
+    private function registerExtensionInitializer()
+    {
+        $this->container['extension.initializer'] = function ($container) {
+            return new Initializer();
         };
     }
 
@@ -86,5 +98,31 @@ class Kernel implements HttpKernelInterface
         $this->container['response.builder'] = function ($container) {
             return new Builder($container['twig']);
         };
+    }
+
+    private function loadConfiguration()
+    {
+        $config = $this->parseConfiguration();
+        if (array_key_exists('extensions', $config)) {
+            foreach ($config['extensions'] as $extensionClass => $constructorArguments) {
+                $extension = $this->container['extension.initializer']->initialize($extensionClass, $constructorArguments);
+
+                $extension->load($this->container);
+            }
+        }
+    }
+
+    private function parseConfiguration()
+    {
+        $configFiles = ['config.yml', 'config.yml.dist'];
+
+        foreach ($configFiles as $fileName) {
+            $filePath = sprintf('%s/config/%s', $this->container['tutu.root_path'], $fileName);
+            if ($filePath && file_exists($filePath) && $config = Yaml::parse(file_get_contents($filePath))) {
+                return $config;
+            }
+        }
+
+        return [];
     }
 }

@@ -1,4 +1,5 @@
 /config/responses.yml
+/config/config.yml
 /var/*
 /bin/*
 !/var/.gitkeep
