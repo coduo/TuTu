@@ -16,8 +16,6 @@ class ConfigResolverSpec extends ObjectBehavior
     {
         $loader->getResponsesArray()->willReturn([]);
         $this->beConstructedWith($loader);
-        $r = new RouteCollection();
-        $loader->getRouteCollection()->willReturn($r);
     }
 
     function it_resolve_config_when_method_and_request_uri_fits_configuration(Loader $loader, UrlMatcher $matcher)
@@ -28,10 +26,6 @@ class ConfigResolverSpec extends ObjectBehavior
                 'methods' => ['POST']
             ]
         ]);
-
-        $routeCollection = new RouteCollection();
-        $routeCollection->add('foo_index', new Route('/foo/index'));
-        $loader->getRouteCollection()->willReturn($routeCollection);
 
         $request = Request::create('/foo/index', 'POST');
 

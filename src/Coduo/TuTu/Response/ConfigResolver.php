@@ -6,6 +6,7 @@ use Coduo\TuTu\Response\Config\Loader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\RouteCollection;
 
 class ConfigResolver
 {
@@ -26,7 +27,7 @@ class ConfigResolver
             $this->configs[$name] = ResponseConfig::fromArray($responseArrayConfig);
         }
 
-        $this->routeCollection = $loader->getRouteCollection();
+        $this->routeCollection = $this->buildRouteCollection();
     }
 
     /**
@@ -49,5 +50,21 @@ class ConfigResolver
         }
 
         return null;
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    private function buildRouteCollection()
+    {
+        $routeCollection = new RouteCollection();
+
+        if (count($this->configs) > 0) {
+            foreach ($this->configs as $name => $config) {
+                $routeCollection->add($name, $config->getRoute());
+            }
+        }
+
+        return $routeCollection;
     }
 }
