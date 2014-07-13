@@ -3,6 +3,7 @@
 namespace Coduo\TuTu\Response;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Routing\Route;
 
 final class ResponseConfig
 {
@@ -30,6 +31,10 @@ final class ResponseConfig
      * @var array
      */
     private $headers;
+    /**
+     * @var \Symfony\Component\Routing\Route
+     */
+    private $route;
 
     /**
      * @param $route
@@ -38,22 +43,25 @@ final class ResponseConfig
      * @param array $headers
      * @internal param array $methods
      */
-    public function __construct($route, $content = '', $status = 200, $headers = [])
+    public function __construct(Route $route, $content = '', $status = 200, $headers = [])
     {
-        $this->validateRoute($route);
-
-        $this->routePattern = $this->buildRoutePattern($route);;
         $this->methods = [];
         $this->content = $content;
         $this->status = (int) $status;
         $this->headers = $headers;
+        $this->route = $route;
     }
 
     public static function fromArray(array $arrayConfig)
     {
         $configResolver = self::createArrayConfigResolver();
         $config = $configResolver->resolve($arrayConfig);
-        $responseConfig = new ResponseConfig($config['path'], $config['content'], $config['status'], $config['headers']);
+        $responseConfig = new ResponseConfig(
+            new Route($config['path']),
+            $config['content'],
+            $config['status'],
+            $config['headers']
+        );
         $responseConfig->setAllowedMethods($config['methods']);
 
         return $responseConfig;
@@ -116,37 +124,11 @@ final class ResponseConfig
     }
 
     /**
-     * @param $route
-     * @return string
+     * @return \Symfony\Component\Routing\Route
      */
-    private function trimRoute($route)
+    public function getRoute()
     {
-        return trim($route, '/');
-    }
-
-    /**
-     * @param $route
-     * @throws \InvalidArgumentException
-     */
-    private function validateRoute($route)
-    {
-        if (!is_string($route)) {
-            throw new \InvalidArgumentException("Route must be a valid string.");
-        }
-
-        if (empty($route)) {
-            throw new \InvalidArgumentException("Route can't be empty.");
-        }
-    }
-
-    /**
-     * @param $route
-     * @return mixed|string
-     */
-    private function buildRoutePattern($route)
-    {
-        $routePattern = preg_replace('/{id}/', '__PLACEHOLDER__', $this->trimRoute($route));
-        return '/^' . preg_replace('/__PLACEHOLDER__/', '([^\/]*)', preg_quote($routePattern, '/')) . '$/';;
+        return $this->route;
     }
 
     /**
