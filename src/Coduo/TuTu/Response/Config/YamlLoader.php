@@ -2,11 +2,15 @@
 
 namespace Coduo\TuTu\Response\Config;
 
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Yaml\Yaml;
 
 class YamlLoader implements Loader
 {
     private $responsesYamlPath;
+
+    private $config;
 
     /**
      * @param $responsesYamlPath
@@ -20,14 +24,30 @@ class YamlLoader implements Loader
         }
 
         $this->responsesYamlPath = $responsesYamlPath;
+        $this->config = Yaml::parse(file_get_contents($this->responsesYamlPath));
     }
 
     /**
-     * @return array
+     * @{inheritDoc}
      */
     public function getResponsesArray()
     {
-        $config = Yaml::parse(file_get_contents($this->responsesYamlPath));
-        return is_array($config) ? $config : [];
+        return is_array($this->config) ? $this->config : [];
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    public function getRouteCollection()
+    {
+        $routeCollection = new RouteCollection();
+
+        if (count($this->config) > 0) {
+            foreach ($this->config as $name => $params) {
+                $routeCollection->add($name, new Route($params['path']));
+            }
+        }
+
+        return $routeCollection;
     }
 }
