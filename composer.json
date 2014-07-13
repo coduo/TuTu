@@ -11,7 +11,6 @@
         "symfony/http-kernel": "~2.3",
         "symfony/options-resolver": "~2.3",
         "symfony/routing": "~2.3",
-        "pimple/pimple": "~2.1",
         "twig/twig": "1.*",
         "coduo/tutu-faker-extension": "1.0.*@dev"
     },

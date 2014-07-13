@@ -3,8 +3,8 @@
 namespace spec\Coduo\TuTu\Extension;
 
 use Coduo\TuTu\Extension;
+use Coduo\TuTu\ServiceContainer;
 use PhpSpec\ObjectBehavior;
-use Pimple\Container;
 use Prophecy\Argument;
 
 class MyExtension implements Extension
@@ -20,9 +20,9 @@ class MyExtension implements Extension
     }
 
     /**
-     * @param Container $container
+     * @param \Coduo\TuTu\ServiceContainer $container
      */
-    public function load(Container $container)
+    public function load(ServiceContainer $container)
     {
     }
 
