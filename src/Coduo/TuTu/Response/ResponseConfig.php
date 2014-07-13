@@ -3,15 +3,9 @@
 namespace Coduo\TuTu\Response;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Routing\Route;
 
 final class ResponseConfig
 {
-    /**
-     * @var
-     */
-    private $routePattern;
-
     /**
      * @var array
      */
@@ -34,22 +28,23 @@ final class ResponseConfig
     /**
      * @var \Symfony\Component\Routing\Route
      */
-    private $route;
+    private $path;
 
     /**
-     * @param $route
+     * @param $path
      * @param string $content
      * @param int $status
      * @param array $headers
      * @internal param array $methods
      */
-    public function __construct(Route $route, $content = '', $status = 200, $headers = [])
+    public function __construct($path, $content = '', $status = 200, $headers = [])
     {
+        $this->validatePath($path);
         $this->methods = [];
         $this->content = $content;
         $this->status = (int) $status;
         $this->headers = $headers;
-        $this->route = $route;
+        $this->path = $path;
     }
 
     public static function fromArray(array $arrayConfig)
@@ -57,7 +52,7 @@ final class ResponseConfig
         $configResolver = self::createArrayConfigResolver();
         $config = $configResolver->resolve($arrayConfig);
         $responseConfig = new ResponseConfig(
-            new Route($config['path']),
+            $config['path'],
             $config['content'],
             $config['status'],
             $config['headers']
@@ -78,25 +73,11 @@ final class ResponseConfig
     }
 
     /**
-     * @param $method
-     * @return bool
+     * @return array
      */
-    public function isMethodAllowed($method)
+    public function getAllowedMethods()
     {
-        if (!count($this->methods)) {
-            return true;
-        }
-
-        return in_array(strtoupper($method), $this->methods, true);
-    }
-
-    /**
-     * @param $route
-     * @return bool
-     */
-    public function routeMatch($route)
-    {
-        return 0 !== preg_match($this->routePattern, $this->trimRoute($route));
+        return $this->methods;
     }
 
     /**
@@ -124,11 +105,26 @@ final class ResponseConfig
     }
 
     /**
-     * @return \Symfony\Component\Routing\Route
+     * @return string
      */
-    public function getRoute()
+    public function getPath()
     {
-        return $this->route;
+        return '/' . ltrim($this->path, '/');
+    }
+
+    /**
+     * @param $path
+     * @throws \InvalidArgumentException
+     */
+    private function validatePath($path)
+    {
+        if (!is_string($path)) {
+         throw new \InvalidArgumentException("Path must be a valid string.");
+        }
+
+        if (empty($path)) {
+            throw new \InvalidArgumentException("Path can't be empty.");
+        }
     }
 
     /**

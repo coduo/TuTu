@@ -2,23 +2,21 @@
 
 namespace spec\Coduo\TuTu\Response;
 
+use Coduo\TuTu\Request\MatchingPolicy;
 use Coduo\TuTu\Response\Config\Loader;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
-use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Routing\Route;
 
 class ConfigResolverSpec extends ObjectBehavior
 {
-    function let(Loader $loader)
+    function let(Loader $loader, MatchingPolicy $matchingPolicy)
     {
         $loader->getResponsesArray()->willReturn([]);
-        $this->beConstructedWith($loader);
+        $this->beConstructedWith($loader, $matchingPolicy);
     }
 
-    function it_resolve_config_when_method_and_request_uri_fits_configuration(Loader $loader, UrlMatcher $matcher)
+    function it_resolve_config_when_matching_policy_match_request_to_response_config(Loader $loader, MatchingPolicy $matchingPolicy)
     {
         $loader->getResponsesArray()->willReturn([
             [
@@ -28,13 +26,15 @@ class ConfigResolverSpec extends ObjectBehavior
         ]);
 
         $request = Request::create('/foo/index', 'POST');
+        $matchingPolicy->match($request, Argument::type('Coduo\TuTu\Response\ResponseConfig'))->willReturn(true);
 
         $this->resolveResponseConfig($request)->shouldReturnAnInstanceOf('Coduo\TuTu\Response\ResponseConfig');
     }
 
-    function it_return_null_when_cant_resolve_response_config()
+    function it_return_null_when_matching_policy_cant_match_request(MatchingPolicy $matchingPolicy)
     {
         $request = Request::create('/foo/index', 'POST');
+        $matchingPolicy->match($request, Argument::type('Coduo\TuTu\Response\ResponseConfig'))->willReturn(false);
 
         $this->resolveResponseConfig($request)->shouldReturn(null);
     }

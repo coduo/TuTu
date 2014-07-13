@@ -2,11 +2,9 @@
 
 namespace Coduo\TuTu\Response;
 
+use Coduo\TuTu\Request\MatchingPolicy;
 use Coduo\TuTu\Response\Config\Loader;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
-use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\RouteCollection;
 
 class ConfigResolver
 {
@@ -19,15 +17,23 @@ class ConfigResolver
      * @var \Symfony\Component\Routing\RouteCollection
      */
     protected $routeCollection;
+    /**
+     * @var \Coduo\TuTu\Request\MatchingPolicy
+     */
+    private $matchingPolicy;
 
-    public function __construct(Loader $loader)
+    /**
+     * @param Loader $loader
+     * @param MatchingPolicy $matchingPolicy
+     */
+    public function __construct(Loader $loader, MatchingPolicy $matchingPolicy)
     {
         $this->configs = [];
-        foreach ($loader->getResponsesArray() as $name => $responseArrayConfig) {
-            $this->configs[$name] = ResponseConfig::fromArray($responseArrayConfig);
+        foreach ($loader->getResponsesArray() as $responseArrayConfig) {
+            $this->configs[] = ResponseConfig::fromArray($responseArrayConfig);
         }
 
-        $this->routeCollection = $this->buildRouteCollection();
+        $this->matchingPolicy = $matchingPolicy;
     }
 
     /**
@@ -36,35 +42,12 @@ class ConfigResolver
      */
     public function resolveResponseConfig(Request $request)
     {
-        $context = new RequestContext();
-        $context->fromRequest($request);
-        $matcher = new UrlMatcher($this->routeCollection, $context);
-
-        foreach ($this->configs as $name => $config) {
-            if ($config->isMethodAllowed($request->getMethod())) {
-
-                if ($matcher->matchRequest($request)) {
-                    return $this->configs[$name];
-                }
+        foreach ($this->configs as $config) {
+            if ($this->matchingPolicy->match($request, $config)) {
+                return $config;
             }
         }
 
         return null;
-    }
-
-    /**
-     * @{inheritDoc}
-     */
-    private function buildRouteCollection()
-    {
-        $routeCollection = new RouteCollection();
-
-        if (count($this->configs) > 0) {
-            foreach ($this->configs as $name => $config) {
-                $routeCollection->add($name, $config->getRoute());
-            }
-        }
-
-        return $routeCollection;
     }
 }

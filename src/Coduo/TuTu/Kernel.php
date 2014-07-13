@@ -3,6 +3,9 @@
 namespace Coduo\TuTu;
 
 use Coduo\TuTu\Extension\Initializer;
+use Coduo\TuTu\Request\ChainMatchingPolicy;
+use Coduo\TuTu\Request\MethodMatchingPolicy;
+use Coduo\TuTu\Request\RouteMatchingPolicy;
 use Coduo\TuTu\Response\Builder;
 use Coduo\TuTu\Response\Config\YamlLoader;
 use Coduo\TuTu\Response\Config;
@@ -38,7 +41,6 @@ class Kernel implements HttpKernelInterface
     {
         try {
             $this->loadConfiguration();
-
             $responseConfig = $this->container->getService('response.config.resolver')->resolveResponseConfig($request);
             if (isset($responseConfig)) {
                 return $this->container->getService('response.builder')->build($responseConfig, $request);
@@ -54,6 +56,7 @@ class Kernel implements HttpKernelInterface
         $this->registerTwig();
         $this->registerExtensionInitializer();
         $this->registerConfigLoader();
+        $this->registerRequestMatchingPolicy();
         $this->registerResponseConfigResolver();
         $this->registerResponseBuilder();
     }
@@ -87,6 +90,17 @@ class Kernel implements HttpKernelInterface
         $this->container->setDefinition('response.config.loader.yaml', function ($container) {
             return new YamlLoader($container->getParameter('response.config.yaml.path'));
         });
+    }
+
+    private function registerRequestMatchingPolicy()
+    {
+        $this->container['request.matching_policy'] = function ($container) {
+            $matchingPolicy = new ChainMatchingPolicy();
+            $matchingPolicy->addMatchingPolicy(new MethodMatchingPolicy());
+            $matchingPolicy->addMatchingPolicy(new RouteMatchingPolicy());
+
+            return $matchingPolicy;
+        };
     }
 
     private function registerResponseConfigResolver()
