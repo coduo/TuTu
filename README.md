@@ -20,7 +20,7 @@ In order to do that you need to prepare simple ``responses.yml`` yaml file.
 
 ```
 $ cd tutu
-$ cp config/responses.yml.dist config/responses.dist
+$ cp config/responses.yml.dist config/responses.yml
 ```
 
 Lets assume that we would like to create some kind of "Hello world" response
