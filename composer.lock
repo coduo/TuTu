@@ -48,11 +48,7 @@
                 "MIT"
             ],
             "description": "This extensions integrates fzaninotto/faker with TuTu.",
-<<<<<<< HEAD
             "time": "2014-07-14 11:20:31"
-=======
-            "time": "2014-07-12 18:04:29"
->>>>>>> Updated in favor of changing service container
         },
         {
             "name": "fzaninotto/faker",
