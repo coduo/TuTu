@@ -94,19 +94,31 @@ class Kernel implements HttpKernelInterface
 
     private function registerRequestMatchingPolicy()
     {
-        $this->container['request.matching_policy'] = function ($container) {
+        $this->container->setDefinition('request.matching_policy.method', function($container) {
+            return new MethodMatchingPolicy();
+        }, ['matching_policy']);
+        $this->container->setDefinition('request.matching_policy.route', function($container) {
+            return new RouteMatchingPolicy();
+        }, ['matching_policy']);
+
+        $this->container->setDefinition('request.matching_policy', function ($container) {
             $matchingPolicy = new ChainMatchingPolicy();
-            $matchingPolicy->addMatchingPolicy(new MethodMatchingPolicy());
-            $matchingPolicy->addMatchingPolicy(new RouteMatchingPolicy());
+            $matchingPolicies = $container->getServicesByTag('matching_policy');
+            foreach ($matchingPolicies as $policy) {
+                $matchingPolicy->addMatchingPolicy($policy);
+            }
 
             return $matchingPolicy;
-        };
+        });
     }
 
     private function registerResponseConfigResolver()
     {
         $this->container->setStaticDefinition('response.config.resolver', function ($container) {
-            return new ConfigResolver($container->getService('response.config.loader.yaml'));
+            return new ConfigResolver(
+                $container->getService('response.config.loader.yaml'),
+                $container->getService('request.matching_policy')
+            );
         });
     }
 

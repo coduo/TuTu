@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dc09f11b1deedcbbea6dd7bec978873c",
+    "hash": "98062f462999da4cb9ded7854c9cd4d3",
     "packages": [
         {
             "name": "coduo/tutu-faker-extension",
@@ -48,7 +48,11 @@
                 "MIT"
             ],
             "description": "This extensions integrates fzaninotto/faker with TuTu.",
+<<<<<<< HEAD
             "time": "2014-07-14 11:20:31"
+=======
+            "time": "2014-07-12 18:04:29"
+>>>>>>> Updated in favor of changing service container
         },
         {
             "name": "fzaninotto/faker",
