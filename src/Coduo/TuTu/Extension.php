@@ -2,12 +2,10 @@
 
 namespace Coduo\TuTu;
 
-use Pimple\Container;
-
 interface Extension
 {
     /**
-     * @param Container $container
+     * @param ServiceContainer $container
      */
-    public function load(Container $container);
+    public function load(ServiceContainer $container);
 }

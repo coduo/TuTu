@@ -1,7 +1,7 @@
 <?php
 
 use Coduo\TuTu\Kernel;
-use Pimple\Container;
+use Coduo\TuTu\ServiceContainer;
 use Symfony\Component\HttpFoundation\Request;
 
 if (is_file($autoload = getcwd() . '/vendor/autoload.php')) {
@@ -20,8 +20,8 @@ if (is_dir($vendor = __DIR__ . '/../vendor')) {
     );
 }
 
-$container = new Container();
-$container['tutu.root_path'] = realpath(__DIR__ . '/..');
+$container = new ServiceContainer();
+$container->setParameter('tutu.root_path', realpath(__DIR__ . '/..'));
 $kernel = new Kernel($container);
 $request = Request::createFromGlobals();
 
