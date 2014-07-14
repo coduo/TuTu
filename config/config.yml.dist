@@ -1,2 +1,2 @@
-#extensions:
-#    Coduo\TuTu\Extension\Faker: ~
+extensions:
+    Coduo\TuTu\Extension\Faker: ~

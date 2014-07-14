@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/coduo/tutu-faker-extension.git",
-                "reference": "b8695289dcfbe0de5c6cb986dbd5138b039fb5a2"
+                "reference": "c6f2aa784b1e4a719a056418346dcb629ce2b0f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coduo/tutu-faker-extension/zipball/b8695289dcfbe0de5c6cb986dbd5138b039fb5a2",
-                "reference": "b8695289dcfbe0de5c6cb986dbd5138b039fb5a2",
+                "url": "https://api.github.com/repos/coduo/tutu-faker-extension/zipball/c6f2aa784b1e4a719a056418346dcb629ce2b0f2",
+                "reference": "c6f2aa784b1e4a719a056418346dcb629ce2b0f2",
                 "shasum": ""
             },
             "require": {
@@ -48,7 +48,7 @@
                 "MIT"
             ],
             "description": "This extensions integrates fzaninotto/faker with TuTu.",
-            "time": "2014-07-12 18:04:29"
+            "time": "2014-07-14 11:20:31"
         },
         {
             "name": "fzaninotto/faker",
@@ -544,7 +544,7 @@
                     "role": "Lead Developer"
                 },
                 {
-                    "name": "Armin Ronacher",
+                    "name": "Armin Ronacher2",
                     "email": "armin.ronacher@active-4.com",
                     "role": "Project Founder"
                 },
