@@ -63,6 +63,14 @@ class ServiceContainer
         return array_key_exists($id, $this->serviceDefinitions);
     }
 
+
+    public function removeService($id)
+    {
+        if ($this->hasService($id)){
+            unset($this->serviceDefinitions[$id]);
+        }
+    }
+
     /**
      * getService($id) will return result of $definition closure.
      * Callback will be executed with $this (ServiceContainer) as a argument.

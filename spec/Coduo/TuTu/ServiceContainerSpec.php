@@ -87,4 +87,17 @@ class ServiceContainerSpec extends ObjectBehavior
     {
         $this->getServicesByTag('foo')->shouldHaveCount(0);
     }
+
+    function it_can_remove_service()
+    {
+        $this->setDefinition(
+            'service',
+            function($container) {
+                return new \stdClass();
+            },
+            ['foo']
+        );
+        $this->removeService('service');
+        $this->hasService('service')->shouldReturn(false);
+    }
 }
