@@ -10,32 +10,34 @@ class ResponseConfigSpec extends ObjectBehavior
 {
     function let()
     {
-        $this->beConstructedWith(new Route('/foo'));
+        $this->beConstructedWith('/foo');
     }
 
-    function it_can_be_created_only_for_specific_methods()
+    function it_throw_exception_when_created_with_not_string_route()
     {
-        $this->setAllowedMethods(['POST']);
-        $this->isMethodAllowed('POST')->shouldReturn(true);
-        $this->isMethodAllowed('GET')->shouldReturn(false);
+        $this->shouldThrow(new \InvalidArgumentException('Path must be a valid string.'))->during('__construct', [new \DateTime()]);
     }
 
-    function it_allows_all_methods_by_default()
+    function it_throw_exception_when_created_with_empty_route()
     {
-        $this->isMethodAllowed('DELETE')->shouldReturn(true);
-        $this->isMethodAllowed('POST')->shouldReturn(true);
-        $this->isMethodAllowed('GET')->shouldReturn(true);
+        $this->shouldThrow(new \InvalidArgumentException('Path can\'t be empty.'))->during('__construct', ['']);
     }
 
     function it_always_uppercase_allowed_methods()
     {
-        $this->setAllowedMethods(['post']);
-        $this->isMethodAllowed('POST')->shouldReturn(true);
+        $this->setAllowedMethods(['post', 'GeT']);
+        $this->getAllowedMethods()->shouldReturn(['POST', 'GET']);
     }
 
-    function it_uppercase_method_during_check()
+    function it_always_return_path_with_slash_at_the_beginning()
     {
-        $this->setAllowedMethods(['POST']);
-        $this->isMethodAllowed('post')->shouldReturn(true);
+        $this->beConstructedWith('foo');
+        $this->getPath()->shouldReturn('/foo');
+    }
+
+    function it_always_return_path_with_single_slash_at_the_beginning()
+    {
+        $this->beConstructedWith('//foo');
+        $this->getPath()->shouldReturn('/foo');
     }
 }

@@ -3,6 +3,9 @@
 namespace Coduo\TuTu;
 
 use Coduo\TuTu\Extension\Initializer;
+use Coduo\TuTu\Request\ChainMatchingPolicy;
+use Coduo\TuTu\Request\MethodMatchingPolicy;
+use Coduo\TuTu\Request\RouteMatchingPolicy;
 use Coduo\TuTu\Response\Builder;
 use Coduo\TuTu\Response\Config\YamlLoader;
 use Coduo\TuTu\Response\Config;
@@ -38,7 +41,6 @@ class Kernel implements HttpKernelInterface
     {
         try {
             $this->loadConfiguration();
-
             $responseConfig = $this->container->getService('response.config.resolver')->resolveResponseConfig($request);
             if (isset($responseConfig)) {
                 return $this->container->getService('response.builder')->build($responseConfig, $request);
@@ -54,6 +56,7 @@ class Kernel implements HttpKernelInterface
         $this->registerTwig();
         $this->registerExtensionInitializer();
         $this->registerConfigLoader();
+        $this->registerRequestMatchingPolicy();
         $this->registerResponseConfigResolver();
         $this->registerResponseBuilder();
     }
@@ -89,10 +92,33 @@ class Kernel implements HttpKernelInterface
         });
     }
 
+    private function registerRequestMatchingPolicy()
+    {
+        $this->container->setDefinition('request.matching_policy.method', function($container) {
+            return new MethodMatchingPolicy();
+        }, ['matching_policy']);
+        $this->container->setDefinition('request.matching_policy.route', function($container) {
+            return new RouteMatchingPolicy();
+        }, ['matching_policy']);
+
+        $this->container->setDefinition('request.matching_policy', function ($container) {
+            $matchingPolicy = new ChainMatchingPolicy();
+            $matchingPolicies = $container->getServicesByTag('matching_policy');
+            foreach ($matchingPolicies as $policy) {
+                $matchingPolicy->addMatchingPolicy($policy);
+            }
+
+            return $matchingPolicy;
+        });
+    }
+
     private function registerResponseConfigResolver()
     {
         $this->container->setStaticDefinition('response.config.resolver', function ($container) {
-            return new ConfigResolver($container->getService('response.config.loader.yaml'));
+            return new ConfigResolver(
+                $container->getService('response.config.loader.yaml'),
+                $container->getService('request.matching_policy')
+            );
         });
     }
 
