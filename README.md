@@ -72,6 +72,26 @@ As you can see there are few was to customize TuTu responses.
 
 In content template you have access to all twig features. You can also use ``request`` variable to access request data.
 
+## Load response content from file
+
+In order to keep your config files as small as possible you can move response content into separated file.
+
+```
+# config/responses.yml
+
+hello_world_get:
+  path: /hello/world
+  methods: ['GET']
+  content: @resources/hello_world.twig.html
+```
+
+Above configuration is going to load content from hello_world.twig.html file present in ``@resources`` namespace.
+
+```
+{# resources/hello_world.twig.html #}
+Hello {{ request.request.get('name') }}!
+```
+
 ## Extensions
 
 Because there is no such thing as perfect tool TuTu allows you to create extensions.

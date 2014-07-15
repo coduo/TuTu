@@ -2,6 +2,7 @@
 /config/config.yml
 /var/*
 /bin/*
-!/var/.gitkeep
+!/var/.gitkegep
+!/var/.resources
 /vendor/
 /composer.phar

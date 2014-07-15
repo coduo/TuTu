@@ -64,10 +64,14 @@ class Kernel implements HttpKernelInterface
     private function registerTwig()
     {
         $this->container->setStaticDefinition('twig' ,function ($container) {
-            $loader = new \Twig_Loader_String();
-            $twig = new \Twig_Environment($loader, array(
-                'cache' => $container->getParameter('tutu.root_path') . '/var',
-            ));
+            $stringLoader = new \Twig_Loader_String();
+            $filesystemLoader = new \Twig_Loader_Filesystem();
+            $filesystemLoader->addPath($container->getParameter('tutu.root_path') . '/resources', 'resources');
+
+            $loader = new \Twig_Loader_Chain([$filesystemLoader, $stringLoader]);
+            $twig = new \Twig_Environment($loader, [
+                'cache' => $container->getParameter('tutu.root_path') . '/var/twig',
+            ]);
 
             return $twig;
         });
