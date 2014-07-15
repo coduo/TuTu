@@ -4,7 +4,7 @@ Feature: Create response from routing.yml file
   I need to create routing.yml file with responses for specific requests
 
   Scenario: Create response with default response code and static body
-    Given there is a routing file "responses.yml" with following content:
+    Given there is a responses config file "responses.yml" with following content:
     """
     hello_world:
       path: /hello/world
@@ -36,7 +36,7 @@ Feature: Create response from routing.yml file
     """
 
   Scenario: Create response with custom status code
-    Given there is a routing file "responses.yml" with following content:
+    Given there is a responses config file "responses.yml" with following content:
     """
     empty:
       path: /empty
@@ -48,7 +48,7 @@ Feature: Create response from routing.yml file
     And the response content should be empty
 
   Scenario: Create response with custom headers
-    Given there is a routing file "responses.yml" with following content:
+    Given there is a responses config file "responses.yml" with following content:
     """
     json:
       path: /api/json

@@ -4,7 +4,7 @@ Feature: Create echo response
   I need to create response configuration that returns data from request
 
   Scenario: Create response from request parameters
-    Given there is a routing file "responses.yml" with following content:
+    Given there is a responses config file "responses.yml" with following content:
     """
     hello_world:
       path: /hello/world
@@ -21,24 +21,24 @@ Feature: Create echo response
     Hello Norbert!
     """
 
-    Scenario: Create response from request parameters with placeholders
-      Given there is a routing file "responses.yml" with following content:
-      """
-      item_details:
-        path: /products/{id}/photos/{photoId}
-        content: |
-          Hello From photo
-      """
-      And TuTu is running on host "localhost" at port "8000"
-      When http client send POST request on "http://localhost:8000/products/1/photos/1"
-      Then response status code should be 200
-      And the response content should be equal to:
-      """
-      Hello From photo
-      """
+  Scenario: Create response from request parameters with placeholders
+    Given there is a responses config file "responses.yml" with following content:
+    """
+    item_details:
+      path: /products/{id}/photos/{photoId}
+      content: |
+        Hello From photo
+    """
+    And TuTu is running on host "localhost" at port "8000"
+    When http client send POST request on "http://localhost:8000/products/1/photos/1"
+    Then response status code should be 200
+    And the response content should be equal to:
+    """
+    Hello From photo
+    """
 
   Scenario: Create response from request query parameters
-    Given there is a routing file "responses.yml" with following content:
+    Given there is a responses config file "responses.yml" with following content:
     """
     hello_world:
       path: /hello/world

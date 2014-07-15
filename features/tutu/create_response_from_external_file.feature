@@ -4,7 +4,7 @@ Feature: Create response from external file
   I need to load response content from external file using {% include %}
 
   Scenario: Create response from request parameters
-    Given there is a routing file "responses.yml" with following content:
+    Given there is a responses config file "responses.yml" with following content:
     """
     hello_world:
       path: /hello/world
