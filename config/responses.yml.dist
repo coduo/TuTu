@@ -7,5 +7,4 @@ hello_world_get:
 hello_world_post:
   path: /hello/world
   methods: ['POST']
-  content: |
-    Hello {{ request.request.get('name') }}!
+  content: @resources/hello_world_post.html.twig

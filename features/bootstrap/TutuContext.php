@@ -2,16 +2,22 @@
 
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\PyStringNode;
+use Behat\MinkExtension\Context\RawMinkContext;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessBuilder;
 
-class TutuContext extends \Behat\MinkExtension\Context\RawMinkContext implements SnippetAcceptingContext
+class TutuContext extends RawMinkContext implements SnippetAcceptingContext
 {
     /**
      * @var string
      */
     private $routingFilePath;
+
+    /**
+     * @var string
+     */
+    private $resourceFilePath;
 
     /**
      * @var Process
@@ -54,6 +60,10 @@ class TutuContext extends \Behat\MinkExtension\Context\RawMinkContext implements
         if ($fs->exists($this->routingFilePath)) {
             $fs->remove($this->routingFilePath);
         }
+
+        if ($fs->exists($this->resourceFilePath)) {
+            $fs->remove($this->resourceFilePath);
+        }
     }
 
     /**
@@ -62,6 +72,20 @@ class TutuContext extends \Behat\MinkExtension\Context\RawMinkContext implements
     public function thereIsAEmpyFile()
     {
         $this->thereIsARoutingFileWithFollowingContent(new PyStringNode([], 0));
+    }
+
+    /**
+     * @Given there is a resource file :fileName with following content
+     */
+    public function thereIsAResourceFileWithFollowingContent($fileName, PyStringNode $fileContent)
+    {
+        $fs = new Filesystem();
+        $this->resourceFilePath = $this->webPath . '/../resources/' . $fileName;
+        if ($fs->exists($this->resourceFilePath)) {
+            $fs->remove($this->resourceFilePath);
+        }
+
+        $fs->dumpFile($this->resourceFilePath, (string) $fileContent);
     }
 
     /**
