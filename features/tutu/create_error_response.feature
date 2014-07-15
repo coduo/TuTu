@@ -4,7 +4,7 @@ Feature: Create response when cant match request
   I expect response with constant message and specific header in such situation
 
   Scenario: Create response when cant match request
-    Given there is a empy file "responses.yml"
+    Given there is a empty responses config file "responses.yml"
     And TuTu is running on host "localhost" at port "8000"
     When http client send GET request on "http://localhost:8000/hello/world"
     Then response status code should be 404
@@ -17,7 +17,7 @@ Feature: Create response when cant match request
       | TuTu-Error  | Request mismatch |
 
   Scenario: Create response for internal error
-    Given there is a routing file "responses.yml" with following content:
+    Given there is a responses config file "responses.yml" with following content:
     """
     hello_world:
       path: /hello/world

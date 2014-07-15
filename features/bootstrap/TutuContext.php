@@ -10,16 +10,6 @@ use Symfony\Component\Process\ProcessBuilder;
 class TutuContext extends RawMinkContext implements SnippetAcceptingContext
 {
     /**
-     * @var string
-     */
-    private $routingFilePath;
-
-    /**
-     * @var string
-     */
-    private $resourceFilePath;
-
-    /**
      * @var Process
      */
     private $tutuProcess;
@@ -34,12 +24,42 @@ class TutuContext extends RawMinkContext implements SnippetAcceptingContext
      */
     private $webPath;
 
+    /**
+     * @var string
+     */
+    private $workDir;
+
     public function __construct($webPath)
     {
         if (!file_exists($webPath)) {
             throw new \InvalidArgumentException(sprintf("Path %s does not exist", $webPath));
         }
         $this->webPath = $webPath;
+    }
+
+    /**
+     * @BeforeScenario
+     */
+    public function createWorkDir()
+    {
+        $this->workDir = sprintf(
+            '%s/%s',
+            sys_get_temp_dir(),
+            uniqid('TuTuContext')
+        );
+        $fs = new Filesystem();
+        $fs->mkdir($this->workDir, 0777);
+        chdir($this->workDir);
+        $fs->mkdir($this->workDir . '/resources');
+    }
+
+    /**
+     * @AfterScenario
+     */
+    public function removeWorkDir()
+    {
+        $fs = new Filesystem();
+        $fs->remove($this->workDir);
     }
 
     /**
@@ -52,26 +72,11 @@ class TutuContext extends RawMinkContext implements SnippetAcceptingContext
     }
 
     /**
-     * @AfterScenario
+     * @Given there is a empty responses config file :fileName
      */
-    public function removeResponsesConfiguration()
+    public function thereIsAEmptyFile($fileName)
     {
-        $fs = new Filesystem();
-        if ($fs->exists($this->routingFilePath)) {
-            $fs->remove($this->routingFilePath);
-        }
-
-        if ($fs->exists($this->resourceFilePath)) {
-            $fs->remove($this->resourceFilePath);
-        }
-    }
-
-    /**
-     * @Given there is a empy file "responses.yml"
-     */
-    public function thereIsAEmpyFile()
-    {
-        $this->thereIsARoutingFileWithFollowingContent(new PyStringNode([], 0));
+        $this->thereIsARoutingFileWithFollowingContent($fileName, new PyStringNode([], 0));
     }
 
     /**
@@ -80,26 +85,27 @@ class TutuContext extends RawMinkContext implements SnippetAcceptingContext
     public function thereIsAResourceFileWithFollowingContent($fileName, PyStringNode $fileContent)
     {
         $fs = new Filesystem();
-        $this->resourceFilePath = $this->webPath . '/../resources/' . $fileName;
-        if ($fs->exists($this->resourceFilePath)) {
-            $fs->remove($this->resourceFilePath);
+        $resourceFilePath = $this->workDir . '/resources/' . $fileName;
+        if ($fs->exists($resourceFilePath)) {
+            $fs->remove($resourceFilePath);
         }
 
-        $fs->dumpFile($this->resourceFilePath, (string) $fileContent);
+        $fs->dumpFile($resourceFilePath, (string) $fileContent);
     }
 
     /**
-     * @Given there is a routing file "responses.yml" with following content:
+     * @Given there is a routing file :fileName with following content:
+     * @Given there is a responses config file :fileName with following content:
      */
-    public function thereIsARoutingFileWithFollowingContent(PyStringNode $fileContent)
+    public function thereIsARoutingFileWithFollowingContent($fileName, PyStringNode $fileContent)
     {
         $fs = new Filesystem();
-        $this->routingFilePath = $this->webPath . '/../config/responses.yml';
-        if ($fs->exists($this->routingFilePath)) {
-            $fs->remove($this->routingFilePath);
+        $responsesConfigFilePath = $this->workDir . '/config/' . $fileName;
+        if ($fs->exists($responsesConfigFilePath)) {
+            $fs->remove($responsesConfigFilePath);
         }
 
-        $fs->dumpFile($this->routingFilePath, (string) $fileContent);
+        $fs->dumpFile($responsesConfigFilePath, (string) $fileContent);
     }
 
     /**
@@ -109,7 +115,13 @@ class TutuContext extends RawMinkContext implements SnippetAcceptingContext
     {
         $this->tutuPort = $port;
         $this->killEveryProcessRunningOnTuTuPort();
-        $builder = new ProcessBuilder([PHP_BINARY, '-S', sprintf('%s:%s', $host, $port)]);
+        $builder = new ProcessBuilder([
+            PHP_BINARY,
+            '-S',
+            sprintf('%s:%s', $host, $port)
+        ]);
+        $builder->setEnv('tutu_responses', $this->workDir . '/config/responses.yml');
+        $builder->setEnv('tutu_resources', $this->workDir . '/resources');
         $builder->setWorkingDirectory($this->webPath);
         $builder->setTimeout(null);
         $this->tutuProcess = $builder->getProcess();

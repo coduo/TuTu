@@ -63,10 +63,19 @@ class Kernel implements HttpKernelInterface
 
     private function registerTwig()
     {
-        $this->container->setStaticDefinition('twig' ,function ($container) {
+        $resourcesPath = $this->container->getParameter('tutu.root_path') . '/resources';
+        if ($customPath = getenv('tutu_resources')) {
+            if (!file_exists($customPath)) {
+                throw new \RuntimeException('Custom resources path not found at '.$customPath);
+            }
+
+            $resourcesPath = $customPath;
+        }
+
+        $this->container->setStaticDefinition('twig' ,function ($container) use ($resourcesPath) {
             $stringLoader = new \Twig_Loader_String();
             $filesystemLoader = new \Twig_Loader_Filesystem();
-            $filesystemLoader->addPath($container->getParameter('tutu.root_path') . '/resources', 'resources');
+            $filesystemLoader->addPath($resourcesPath, 'resources');
 
             $loader = new \Twig_Loader_Chain([$filesystemLoader, $stringLoader]);
             $twig = new \Twig_Environment($loader, [
@@ -86,9 +95,18 @@ class Kernel implements HttpKernelInterface
 
     private function registerConfigLoader()
     {
+        $responsesPath = $this->container->getParameter('tutu.root_path') . '/config/responses.yml';
+        if ($customPath = getenv('tutu_responses')) {
+            if (!file_exists($customPath)) {
+                throw new \RuntimeException('Custom responses file not found at '.$customPath);
+            }
+
+            $responsesPath = $customPath;
+        }
+
         $this->container->setParameter(
             'response.config.yaml.path',
-            $this->container->getParameter('tutu.root_path') . '/config/responses.yml'
+            $responsesPath
         );
 
         $this->container->setDefinition('response.config.loader.yaml', function ($container) {
@@ -147,10 +165,20 @@ class Kernel implements HttpKernelInterface
 
     private function parseConfiguration()
     {
-        $configFiles = ['config.yml', 'config.yml.dist'];
+        $configFiles = [
+            sprintf('%s/config/%s', $this->container->getParameter('tutu.root_path'), 'config.yml'),
+            sprintf('%s/config/%s', $this->container->getParameter('tutu.root_path'), 'config.yml.dist')
+        ];
 
-        foreach ($configFiles as $fileName) {
-            $filePath = sprintf('%s/config/%s', $this->container->getParameter('tutu.root_path'), $fileName);
+        if ($customPath = getenv('tutu_config')) {
+            if (!file_exists($customPath)) {
+                throw new \RuntimeException('Custom config file not found at '.$customPath);
+            }
+
+            $configFiles = (array) $customPath;
+        }
+
+        foreach ($configFiles as $filePath) {
             if ($filePath && file_exists($filePath) && $config = Yaml::parse(file_get_contents($filePath))) {
                 return $config;
             }
