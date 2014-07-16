@@ -1,62 +1,37 @@
 <?php
 
-namespace Coduo\TuTu\Response;
+namespace Coduo\TuTu\Config\Element;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class ResponseConfig
+class Request
 {
     /**
-     * @var array
-     */
-    private $methods;
-
-    /**
      * @var string
-     */
-    private $content;
-
-    /**
-     * @var int
-     */
-    private $status;
-
-    /**
-     * @var array
-     */
-    private $headers;
-    /**
-     * @var \Symfony\Component\Routing\Route
      */
     private $path;
 
     /**
-     * @param $path
-     * @param string $content
-     * @param int $status
-     * @param array $headers
-     * @internal param array $methods
+     * @var array
      */
-    public function __construct($path, $content = '', $status = 200, $headers = [])
+    private $allowedMethods;
+
+    /**
+     * @param $path
+     */
+    public function __construct($path)
     {
         $this->validatePath($path);
-        $this->methods = [];
-        $this->content = $content;
-        $this->status = (int) $status;
-        $this->headers = $headers;
         $this->path = $path;
+        $this->allowedMethods = [];
     }
 
     public static function fromArray(array $arrayConfig)
     {
         $configResolver = self::createArrayConfigResolver();
         $config = $configResolver->resolve($arrayConfig);
-        $responseConfig = new ResponseConfig(
-            $config['path'],
-            $config['content'],
-            $config['status'],
-            $config['headers']
-        );
+        $responseConfig = new Request($config['path']);
+
         $responseConfig->setAllowedMethods($config['methods']);
 
         return $responseConfig;
@@ -67,7 +42,7 @@ final class ResponseConfig
      */
     public function setAllowedMethods($methods)
     {
-        $this->methods = array_map(function ($method) {
+        $this->allowedMethods = array_map(function ($method) {
             return strtoupper($method);
         }, $methods);
     }
@@ -77,31 +52,7 @@ final class ResponseConfig
      */
     public function getAllowedMethods()
     {
-        return $this->methods;
-    }
-
-    /**
-     * @return array
-     */
-    public function getHeaders()
-    {
-        return $this->headers;
-    }
-
-    /**
-     * @return string
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStatus()
-    {
-        return $this->status;
+        return $this->allowedMethods;
     }
 
     /**
@@ -119,7 +70,7 @@ final class ResponseConfig
     private function validatePath($path)
     {
         if (!is_string($path)) {
-         throw new \InvalidArgumentException("Path must be a valid string.");
+            throw new \InvalidArgumentException("Path must be a valid string.");
         }
 
         if (empty($path)) {
@@ -134,12 +85,9 @@ final class ResponseConfig
     {
         $configResolver = new OptionsResolver();
         $configResolver->setRequired(['path']);
-        $configResolver->setDefaults(['content' => '', 'status' => 200, 'headers' => [], 'methods' => []]);
+        $configResolver->setDefaults(['methods' => []]);
         $configResolver->setAllowedTypes([
             'path' => 'string',
-            'content' => 'string',
-            'status' => 'integer',
-            'headers' => 'array',
             'methods' => 'array'
         ]);
 

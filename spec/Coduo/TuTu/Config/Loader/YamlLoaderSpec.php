@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\Coduo\TuTu\Response\Config;
+namespace spec\Coduo\TuTu\Config\Loader;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -17,7 +17,7 @@ class YamlLoaderSpec extends ObjectBehavior
 
     function it_is_loader()
     {
-        $this->shouldBeAnInstanceOf('Coduo\TuTu\Response\Config\Loader');
+        $this->shouldBeAnInstanceOf('Coduo\TuTu\Config\Loader\Loader');
     }
 
     function it_throws_exception_when_invalid_responses_yaml_path()

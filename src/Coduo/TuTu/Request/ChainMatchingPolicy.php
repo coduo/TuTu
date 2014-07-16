@@ -2,7 +2,7 @@
 
 namespace Coduo\TuTu\Request;
 
-use Coduo\TuTu\Response\ResponseConfig;
+use Coduo\TuTu\Config\Element;
 use Symfony\Component\HttpFoundation\Request;
 
 class ChainMatchingPolicy implements MatchingPolicy
@@ -19,17 +19,17 @@ class ChainMatchingPolicy implements MatchingPolicy
 
     /**
      * @param Request $request
-     * @param ResponseConfig $responseConfig
-     * @return boolean
+     * @param Element $config
+     * @return bool
      */
-    public function match(Request $request, ResponseConfig $responseConfig)
+    public function match(Request $request, Element $config)
     {
         if (!count($this->matchingPolicies)) {
             return false;
         }
 
         foreach ($this->matchingPolicies as $matchingPolicy) {
-            if (!$matchingPolicy->match($request, $responseConfig)) {
+            if (!$matchingPolicy->match($request, $config)) {
                 return false;
             }
         }

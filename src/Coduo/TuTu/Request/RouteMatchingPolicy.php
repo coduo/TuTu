@@ -2,20 +2,20 @@
 
 namespace Coduo\TuTu\Request;
 
-use Coduo\TuTu\Response\ResponseConfig;
+use Coduo\TuTu\Config\Element;
 use Symfony\Component\HttpFoundation\Request;
 
 class RouteMatchingPolicy implements MatchingPolicy
 {
     /**
      * @param Request $request
-     * @param ResponseConfig $responseConfig
-     * @return boolean
+     * @param Element $config
+     * @return bool
      */
-    public function match(Request $request, ResponseConfig $responseConfig)
+    public function match(Request $request, Element $config)
     {
-        $pathPattern = $responseConfig->getPath();
-        preg_match_all('#\{\w+\}#', $responseConfig->getPath(), $placeholders, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
+        $pathPattern = $config->getRequest()->getPath();
+        preg_match_all('#\{\w+\}#', $config->getRequest()->getPath(), $placeholders, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
 
         foreach ($placeholders as $placeholderMatch) {
             $placeholder = $placeholderMatch[0][0];

@@ -2,7 +2,7 @@
 
 namespace spec\Coduo\TuTu\Request;
 
-use Coduo\TuTu\Response\ResponseConfig;
+use Coduo\TuTu\Config\Element;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +16,7 @@ class RouteMatchingPolicySpec extends ObjectBehavior
 
     function it_match_when_request_path_is_equal_to_response_config_path()
     {
-        $responseConfig = ResponseConfig::fromArray(['path' => '/foo']);
+        $responseConfig = Element::fromArray(['request' => ['path' => '/foo']]);
         $request        = Request::create('/foo');
 
         $this->match($request, $responseConfig)->shouldReturn(true);
@@ -24,7 +24,7 @@ class RouteMatchingPolicySpec extends ObjectBehavior
 
     function it_match_when_request_path_is_equal_to_response_config_path_but_contain_upercase_chars()
     {
-        $responseConfig = ResponseConfig::fromArray(['path' => '/FOo']);
+        $responseConfig = Element::fromArray(['request' => ['path' => '/FOo']]);
         $request        = Request::create('/foo');
 
         $this->match($request, $responseConfig)->shouldReturn(true);
@@ -32,7 +32,7 @@ class RouteMatchingPolicySpec extends ObjectBehavior
 
     function it_match_paths_with_placeholders()
     {
-        $responseConfig = ResponseConfig::fromArray(['path' => '/foo/{id}/bar/{name}']);
+        $responseConfig = Element::fromArray(['request' => ['path' => '/foo/{id}/bar/{name}']]);
         $request        = Request::create('/foo/1/bar/norbert');
 
         $this->match($request, $responseConfig)->shouldReturn(true);
@@ -41,7 +41,7 @@ class RouteMatchingPolicySpec extends ObjectBehavior
 
     function it_does_not_match_when_request_path_is_not_matching_response_config_path()
     {
-        $responseConfig = ResponseConfig::fromArray(['path' => '/foo/bar']);
+        $responseConfig = Element::fromArray(['request' => ['path' => '/foo/bar']]);
         $request        = Request::create('/foo/baz');
 
         $this->match($request, $responseConfig)->shouldReturn(false);

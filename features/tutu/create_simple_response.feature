@@ -7,17 +7,19 @@ Feature: Create response from routing.yml file
     Given there is a responses config file "responses.yml" with following content:
     """
     hello_world:
-      path: /hello/world
-      content: |
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>Title of the document</title>
-        </head>
-        <body>
-          <h1>Hello World!</h1>
-        </body>
-        </html>
+      request:
+        path: /hello/world
+      response:
+        content: |
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Title of the document</title>
+          </head>
+          <body>
+            <h1>Hello World!</h1>
+          </body>
+          </html>
     """
     And TuTu is running on host "localhost" at port "8000"
     When http client send GET request on "http://localhost:8000/hello/world"
@@ -39,8 +41,10 @@ Feature: Create response from routing.yml file
     Given there is a responses config file "responses.yml" with following content:
     """
     empty:
-      path: /empty
-      status: 204
+      request:
+        path: /empty
+      response:
+        status: 204
     """
     And TuTu is running on host "localhost" at port "8000"
     When http client send GET request on "http://localhost:8000/empty?wqeqwqw=qweq"
@@ -51,9 +55,11 @@ Feature: Create response from routing.yml file
     Given there is a responses config file "responses.yml" with following content:
     """
     json:
-      path: /api/json
-      headers:
-        "Content-Type": "application/json"
+      request:
+        path: /api/json
+      response:
+        headers:
+          "Content-Type": "application/json"
     """
     And TuTu is running on host "localhost" at port "8000"
     When http client send GET request on "http://localhost:8000/api/json"

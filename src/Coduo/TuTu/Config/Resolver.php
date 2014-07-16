@@ -1,22 +1,18 @@
 <?php
 
-namespace Coduo\TuTu\Response;
+namespace Coduo\TuTu\Config;
 
+use Coduo\TuTu\Config\Loader\Loader;
 use Coduo\TuTu\Request\MatchingPolicy;
-use Coduo\TuTu\Response\Config\Loader;
 use Symfony\Component\HttpFoundation\Request;
 
-class ConfigResolver
+class Resolver
 {
     /**
-     * @var ResponseConfig[]|array
+     * @var Element[]|array
      */
     protected $configs;
 
-    /**
-     * @var \Symfony\Component\Routing\RouteCollection
-     */
-    protected $routeCollection;
     /**
      * @var \Coduo\TuTu\Request\MatchingPolicy
      */
@@ -30,7 +26,7 @@ class ConfigResolver
     {
         $this->configs = [];
         foreach ($loader->getResponsesArray() as $responseArrayConfig) {
-            $this->configs[] = ResponseConfig::fromArray($responseArrayConfig);
+            $this->configs[] = Element::fromArray($responseArrayConfig);
         }
 
         $this->matchingPolicy = $matchingPolicy;
@@ -40,7 +36,7 @@ class ConfigResolver
      * @param Request $request
      * @return null
      */
-    public function resolveResponseConfig(Request $request)
+    public function resolveConfigElement(Request $request)
     {
         foreach ($this->configs as $config) {
             if ($this->matchingPolicy->match($request, $config)) {

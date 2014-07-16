@@ -1,12 +1,11 @@
 <?php
 
-namespace spec\Coduo\TuTu\Response;
+namespace spec\Coduo\TuTu\Config\Element;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Symfony\Component\Routing\Route;
 
-class ResponseConfigSpec extends ObjectBehavior
+class RequestSpec extends ObjectBehavior
 {
     function let()
     {

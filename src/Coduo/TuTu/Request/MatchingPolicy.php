@@ -2,15 +2,15 @@
 
 namespace Coduo\TuTu\Request;
 
-use Coduo\TuTu\Response\ResponseConfig;
+use Coduo\TuTu\Config\Element;
 use Symfony\Component\HttpFoundation\Request;
 
 interface MatchingPolicy
 {
     /**
      * @param Request $request
-     * @param ResponseConfig $responseConfig
+     * @param Element $config
      * @return boolean
      */
-    public function match(Request $request, ResponseConfig $responseConfig);
+    public function match(Request $request, Element $config);
 }

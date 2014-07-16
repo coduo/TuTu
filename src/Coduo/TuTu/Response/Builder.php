@@ -2,6 +2,7 @@
 
 namespace Coduo\TuTu\Response;
 
+use Coduo\TuTu\Config\Element;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,17 +19,17 @@ class Builder
     }
 
     /**
-     * @param ResponseConfig $config
+     * @param Element $config
      * @param Request $request
      * @return Response
      */
-    public function build(ResponseConfig $config, Request $request)
+    public function build(Element $config, Request $request)
     {
-        $content = $this->twig->render($config->getContent(), [
+        $content = $this->twig->render($config->getResponse()->getContent(), [
             'request' => $request
         ]);
 
-        return new Response($content, $config->getStatus(), $config->getHeaders());
+        return new Response($content, $config->getResponse()->getStatus(), $config->getResponse()->getHeaders());
     }
 
     /**
