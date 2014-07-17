@@ -9,6 +9,7 @@ use Coduo\TuTu\Request\ChainMatchingPolicy;
 use Coduo\TuTu\Request\MethodMatchingPolicy;
 use Coduo\TuTu\Request\RouteMatchingPolicy;
 use Coduo\TuTu\Response\Builder;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -53,6 +54,7 @@ class Kernel implements HttpKernelInterface
     private function setUpContainer()
     {
         $this->registerTwig();
+        $this->registerEventDispatcher();
         $this->registerExtensionInitializer();
         $this->registerConfigLoader();
         $this->registerRequestMatchingPolicy();
@@ -82,6 +84,19 @@ class Kernel implements HttpKernelInterface
             ]);
 
             return $twig;
+        });
+    }
+
+    private function registerEventDispatcher()
+    {
+        $this->container->setStaticDefinition('event_dispatcher' ,function ($container) use ($resourcesPath) {
+            $eventDispatcher = new EventDispatcher();
+            $eventSubscribers = $container->getServicesByTag('event_dispatcher.subscriber');
+            foreach ($eventSubscribers as $subscriber) {
+                $eventDispatcher->addSubscriber($subscriber);
+            }
+
+            return $eventDispatcher;
         });
     }
 

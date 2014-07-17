@@ -10,6 +10,7 @@
         "php": ">=5.4.0",
         "symfony/http-kernel": "~2.3",
         "symfony/options-resolver": "~2.3",
+        "symfony/event-dispatcher": "~2.3",
         "twig/twig": "1.*",
         "coduo/tutu-faker-extension": "1.0.*@dev"
     },
