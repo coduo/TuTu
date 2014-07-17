@@ -1,6 +1,6 @@
 <?php
 
-namespace Coduo\TuTu\Response\Config;
+namespace Coduo\TuTu\Config\Loader;
 
 use Symfony\Component\Yaml\Yaml;
 

@@ -7,9 +7,11 @@ Feature: Create echo response
     Given there is a responses config file "responses.yml" with following content:
     """
     hello_world:
-      path: /hello/world
-      content: |
-        Hello {{ request.request.get('name') }}!
+      request:
+        path: /hello/world
+      response:
+        content: |
+          Hello {{ request.request.get('name') }}!
     """
     And TuTu is running on host "localhost" at port "8000"
     When http client send POST request on "http://localhost:8000/hello/world" with following parameters:
@@ -25,9 +27,11 @@ Feature: Create echo response
     Given there is a responses config file "responses.yml" with following content:
     """
     item_details:
-      path: /products/{id}/photos/{photoId}
-      content: |
-        Hello From photo
+      request:
+        path: /products/{id}/photos/{photoId}
+      response:
+        content: |
+          Hello From photo
     """
     And TuTu is running on host "localhost" at port "8000"
     When http client send POST request on "http://localhost:8000/products/1/photos/1"
@@ -41,9 +45,11 @@ Feature: Create echo response
     Given there is a responses config file "responses.yml" with following content:
     """
     hello_world:
-      path: /hello/world
-      content: |
-        Hello {{ request.query.get('name') }}!
+      request:
+        path: /hello/world
+      response:
+        content: |
+          Hello {{ request.query.get('name') }}!
     """
     And TuTu is running on host "localhost" at port "8000"
     When http client send GET request on "http://localhost:8000/hello/world?name=Norbert"

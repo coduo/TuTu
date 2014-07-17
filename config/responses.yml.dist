@@ -1,10 +1,14 @@
 hello_world_get:
-  path: /hello/world
-  methods: ['GET']
-  content: |
-    Hello {{ request.query.get('name') }}!
+  request:
+    path: /hello/world
+    methods: ['GET']
+  response:
+    content: |
+      Hello {{ request.query.get('name') }}!
 
 hello_world_post:
-  path: /hello/world
-  methods: ['POST']
-  content: @resources/hello_world_post.html.twig
+  request:
+    path: /hello/world
+    methods: ['POST']
+  response:
+    content: @resources/hello_world_post.html.twig

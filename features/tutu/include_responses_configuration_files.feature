@@ -12,8 +12,10 @@ Feature: Create response from routing.yml file
     Given there is a responses config file "api.yml" with following content:
     """
     hello_world:
-      path: /hello/world
-      content: "Hello world"
+      request:
+        path: /hello/world
+      response:
+        content: "Hello world"
     """
     And TuTu is running on host "localhost" at port "8000"
     When http client send GET request on "http://localhost:8000/hello/world"
@@ -37,8 +39,10 @@ Feature: Create response from routing.yml file
     And there is a responses config file "api/user.yml" with following content:
     """
     hello_world:
-      path: /hello/world
-      content: "Hello world"
+      request:
+        path: /hello/world
+      response:
+        content: "Hello world"
     """
     And TuTu is running on host "localhost" at port "8000"
     When http client send GET request on "http://localhost:8000/hello/world"

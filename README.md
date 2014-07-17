@@ -27,10 +27,12 @@ Lets assume that we would like to create some kind of "Hello world" response
 
 ```
 hello_world:
-  path: /hello/world
-  methods: ['GET']
-  content: |
-    Hello {{ request.query.get('name') }}!
+  request:
+    path: /hello/world
+    methods: ['GET']
+  response:
+    content: |
+      Hello {{ request.query.get('name') }}!
 ```
 
 ### Run TuTu
@@ -55,20 +57,23 @@ with following content
 # config/responses.yml
 
 hello_world_get:
-  path: /hello/world
-  methods: ['GET']
-  content: "This is nothing more than twig template"
-  headers:
-    "Content-type": "application/json"
-
+  request:
+    path: /hello/world
+    methods: ['GET']
+  response:
+    content: "This is nothing more than twig template"
+    status: 200
+    headers:
+      "Content-type": "application/json"
 ```
 
 As you can see there are few was to customize TuTu responses.
 
-* ``path`` - required option, it represents route. You can use placeholders to create route, for example ``/hello/{name}``
-* ``methods`` - optional. When empty any method is allowed. Must be a valid array
-* ``content`` - optional. Content is nothing more that twig template rendered before passed to response.
-* ``headers`` - optional. Headers added to response Must be a valid array
+* ``request.path`` - required option, it represents route. You can use placeholders to create route, for example ``/hello/{name}``
+* ``request.methods`` - optional. When empty any method is allowed. Must be a valid array
+* ``response.content`` - optional. Content is nothing more that twig template rendered before passed to response.
+* ``response.status`` - optional. Response code
+* ``response.headers`` - optional. Headers added to response Must be a valid array
 
 In content template you have access to all twig features. You can also use ``request`` variable to access request data.
 
@@ -80,9 +85,11 @@ In order to keep your config files as small as possible you can move response co
 # config/responses.yml
 
 hello_world_get:
-  path: /hello/world
-  methods: ['GET']
-  content: @resources/hello_world.twig.html
+  request:
+    path: /hello/world
+    methods: ['GET']
+  response:
+    content: @resources/hello_world.twig.html
 ```
 
 Above configuration is going to load content from hello_world.twig.html file present in ``@resources`` namespace.

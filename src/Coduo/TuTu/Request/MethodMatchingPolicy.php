@@ -2,22 +2,22 @@
 
 namespace Coduo\TuTu\Request;
 
-use Coduo\TuTu\Response\ResponseConfig;
+use Coduo\TuTu\Config\Element;
 use Symfony\Component\HttpFoundation\Request;
 
 class MethodMatchingPolicy implements MatchingPolicy
 {
     /**
      * @param Request $request
-     * @param ResponseConfig $responseConfig
-     * @return boolean
+     * @param Element $config
+     * @return bool
      */
-    public function match(Request $request, ResponseConfig $responseConfig)
+    public function match(Request $request, Element $config)
     {
-        if (!count($responseConfig->getAllowedMethods())) {
+        if (!count($config->getRequest()->getAllowedMethods())) {
             return true;
         }
 
-        return in_array($request->getMethod(), $responseConfig->getAllowedMethods(), true);
+        return in_array($request->getMethod(), $config->getRequest()->getAllowedMethods(), true);
     }
 }

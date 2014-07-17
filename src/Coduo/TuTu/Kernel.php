@@ -2,14 +2,13 @@
 
 namespace Coduo\TuTu;
 
+use Coduo\TuTu\Config\Loader\YamlLoader;
+use Coduo\TuTu\Config\Resolver;
 use Coduo\TuTu\Extension\Initializer;
 use Coduo\TuTu\Request\ChainMatchingPolicy;
 use Coduo\TuTu\Request\MethodMatchingPolicy;
 use Coduo\TuTu\Request\RouteMatchingPolicy;
 use Coduo\TuTu\Response\Builder;
-use Coduo\TuTu\Response\Config\YamlLoader;
-use Coduo\TuTu\Response\Config;
-use Coduo\TuTu\Response\ConfigResolver;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -41,9 +40,9 @@ class Kernel implements HttpKernelInterface
     {
         try {
             $this->loadConfiguration();
-            $responseConfig = $this->container->getService('response.config.resolver')->resolveResponseConfig($request);
-            if (isset($responseConfig)) {
-                return $this->container->getService('response.builder')->build($responseConfig, $request);
+            $configElement = $this->container->getService('response.config.resolver')->resolveConfigElement($request);
+            if (isset($configElement)) {
+                return $this->container->getService('response.builder')->build($configElement, $request);
             }
             return $this->container->getService('response.builder')->buildForMismatch($request);
         } catch (\Exception $e) {
@@ -57,7 +56,7 @@ class Kernel implements HttpKernelInterface
         $this->registerExtensionInitializer();
         $this->registerConfigLoader();
         $this->registerRequestMatchingPolicy();
-        $this->registerResponseConfigResolver();
+        $this->registerConfigResolver();
         $this->registerResponseBuilder();
     }
 
@@ -134,10 +133,10 @@ class Kernel implements HttpKernelInterface
         });
     }
 
-    private function registerResponseConfigResolver()
+    private function registerConfigResolver()
     {
         $this->container->setStaticDefinition('response.config.resolver', function ($container) {
-            return new ConfigResolver(
+            return new Resolver(
                 $container->getService('response.config.loader.yaml'),
                 $container->getService('request.matching_policy')
             );

@@ -20,9 +20,11 @@ Feature: Create response when cant match request
     Given there is a responses config file "responses.yml" with following content:
     """
     hello_world:
-      path: /hello/world
-      content: |
-        Hello {% rwqrqwr %}
+      request:
+        path: /hello/world
+      response:
+        content: |
+          Hello {% rwqrqwr %}
     """
     And TuTu is running on host "localhost" at port "8000"
     When http client send GET request on "http://localhost:8000/hello/world"

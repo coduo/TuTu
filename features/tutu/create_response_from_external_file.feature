@@ -7,8 +7,10 @@ Feature: Create response from external file
     Given there is a responses config file "responses.yml" with following content:
     """
     hello_world:
-      path: /hello/world
-      content: @resources/hello_world.twig.html
+      request:
+        path: /hello/world
+      response:
+        content: @resources/hello_world.twig.html
     """
     And there is a resource file "hello_world.twig.html" with following content
     """
