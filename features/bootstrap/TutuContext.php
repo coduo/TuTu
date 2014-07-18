@@ -95,6 +95,15 @@ class TutuContext extends RawMinkContext implements SnippetAcceptingContext
     }
 
     /**
+     * @Given there is a :filePath file with following content
+     */
+    public function thereIsAFileWithFollowingContent($filePath, PyStringNode $fileContent)
+    {
+        $fs = new Filesystem();
+        $fs->dumpFile($this->workDir . '/' . $filePath, (string) $fileContent);
+    }
+
+    /**
      * @Given there is a routing file :fileName with following content:
      * @Given there is a responses config file :fileName with following content:
      * @Given there is a config file :fileName with following content:
@@ -107,7 +116,10 @@ class TutuContext extends RawMinkContext implements SnippetAcceptingContext
             $fs->remove($configFilePath);
         }
 
-        $fs->dumpFile($configFilePath, (string) $fileContent);
+        $content = (string) $fileContent;
+        $content = str_replace('%workDir%', $this->workDir, $content);
+
+        $fs->dumpFile($configFilePath, $content);
     }
 
     /**

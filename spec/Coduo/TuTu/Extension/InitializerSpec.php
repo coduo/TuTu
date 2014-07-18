@@ -6,6 +6,7 @@ use Coduo\TuTu\Extension;
 use Coduo\TuTu\ServiceContainer;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Symfony\Component\ClassLoader\ClassLoader;
 
 class MyExtension implements Extension
 {
@@ -37,6 +38,12 @@ class MyExtension implements Extension
 
 class InitializerSpec extends ObjectBehavior
 {
+    public function let(ClassLoader $classLoader)
+    {
+        $classLoader->loadClass(Argument::type('string'))->willReturn(false);
+        $this->beConstructedWith($classLoader);
+    }
+
     function it_throws_exception_when_string_is_not_valid_class()
     {
         $this->shouldThrow(new \InvalidArgumentException("asdasd is not valid class."))

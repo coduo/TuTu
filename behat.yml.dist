@@ -9,4 +9,3 @@ default:
                 - TutuContext:
                     webPath: %paths.base%/web
                 - HttpClientContext
-                - ExtensionDeveloperContext
