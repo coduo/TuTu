@@ -17,6 +17,16 @@ class Request
     private $allowedMethods;
 
     /**
+     * @var array
+     */
+    private $request;
+
+    /**
+     * @var array
+     */
+    private $query;
+
+    /**
      * @param $path
      */
     public function __construct($path)
@@ -24,6 +34,8 @@ class Request
         $this->validatePath($path);
         $this->path = $path;
         $this->allowedMethods = [];
+        $this->request = [];
+        $this->query = [];
     }
 
     public static function fromArray(array $arrayConfig)
@@ -33,6 +45,8 @@ class Request
         $responseConfig = new Request($config['path']);
 
         $responseConfig->setAllowedMethods($config['methods']);
+        $responseConfig->setBodyParameters($config['request']);
+        $responseConfig->setQueryParameters($config['query']);
 
         return $responseConfig;
     }
@@ -64,6 +78,54 @@ class Request
     }
 
     /**
+     * @return bool
+     */
+    public function hasBodyParameters()
+    {
+        return (boolean) count($this->request);
+    }
+
+    /**
+     * @param $parameters
+     */
+    public function setBodyParameters($parameters)
+    {
+        $this->request = $parameters;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBodyParameters()
+    {
+        return $this->request;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasQueryParameters()
+    {
+        return (boolean) count($this->query);
+    }
+
+    /**
+     * @param $parameters
+     */
+    public function setQueryParameters($parameters)
+    {
+        $this->query = $parameters;
+    }
+
+    /**
+     * @return array
+     */
+    public function getQueryParameters()
+    {
+        return $this->query;
+    }
+
+    /**
      * @param $path
      * @throws \InvalidArgumentException
      */
@@ -85,10 +147,16 @@ class Request
     {
         $configResolver = new OptionsResolver();
         $configResolver->setRequired(['path']);
-        $configResolver->setDefaults(['methods' => []]);
+        $configResolver->setDefaults([
+            'methods' => [],
+            'request' => [],
+            'query' => []
+        ]);
         $configResolver->setAllowedTypes([
             'path' => 'string',
-            'methods' => 'array'
+            'methods' => 'array',
+            'request' => 'array',
+            'query' => 'array'
         ]);
 
         return $configResolver;

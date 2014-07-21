@@ -60,6 +60,8 @@ hello_world_get:
   request:
     path: /hello/world
     methods: ['GET']
+    query: []
+    request: []
   response:
     content: "This is nothing more than twig template"
     status: 200
@@ -71,6 +73,8 @@ As you can see there are few was to customize TuTu responses.
 
 * ``request.path`` - required option, it represents route. You can use placeholders to create route, for example ``/hello/{name}``
 * ``request.methods`` - optional. When empty any method is allowed. Must be a valid array
+* ``request.request`` - optional. When not empty it will match only request that have identical body ($_POST) parameters.
+* ``request.query`` - optional. When not empty it will match only request that have identical query ($_GET) parameters.
 * ``response.content`` - optional. Content is nothing more that twig template rendered before passed to response.
 * ``response.status`` - optional. Response code
 * ``response.headers`` - optional. Headers added to response Must be a valid array

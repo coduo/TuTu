@@ -9,6 +9,7 @@ use Coduo\TuTu\Event\RequestMatch;
 use Coduo\TuTu\Extension\Initializer;
 use Coduo\TuTu\Request\ChainMatchingPolicy;
 use Coduo\TuTu\Request\MethodMatchingPolicy;
+use Coduo\TuTu\Request\ParameterMatchingPolicy;
 use Coduo\TuTu\Request\RouteMatchingPolicy;
 use Coduo\TuTu\Response\Builder;
 use Symfony\Component\ClassLoader\ClassLoader;
@@ -154,6 +155,9 @@ class Kernel implements HttpKernelInterface
         }, ['matching_policy']);
         $this->container->setDefinition('request.matching_policy.route', function($container) {
             return new RouteMatchingPolicy();
+        }, ['matching_policy']);
+        $this->container->setDefinition('request.matching_policy.parameter', function($container) {
+            return new ParameterMatchingPolicy();
         }, ['matching_policy']);
 
         $this->container->setDefinition('request.matching_policy', function ($container) {
