@@ -3,7 +3,7 @@ Feature: Create response from external file
   In order to keep TuTu configuration as small as possible
   I need to load response content from external file using {% include %}
 
-  Scenario: Create response from request parameters
+  Scenario: Create response from resource file
     Given there is a responses config file "responses.yml" with following content:
     """
     hello_world:
