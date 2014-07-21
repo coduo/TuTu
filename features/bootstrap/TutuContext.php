@@ -52,6 +52,7 @@ class TutuContext extends RawMinkContext implements SnippetAcceptingContext
         chdir($this->workDir);
         $fs->mkdir($this->workDir . '/resources');
         $fs->mkdir($this->workDir . '/config');
+        $fs->dumpFile($this->workDir . '/config/responses.yml', '');
     }
 
     /**
@@ -134,6 +135,7 @@ class TutuContext extends RawMinkContext implements SnippetAcceptingContext
             '-S',
             sprintf('%s:%s', $host, $port)
         ]);
+
         if (file_exists($this->workDir . '/config/config.yml')) {
             $builder->setEnv('tutu_config', $this->workDir . '/config/config.yml');
         }

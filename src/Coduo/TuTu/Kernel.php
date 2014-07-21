@@ -191,14 +191,6 @@ class Kernel implements HttpKernelInterface
             $this->container->getService('class_loader')->addPrefixes($config['autoload']);
         }
 
-        if (array_key_exists('extensions', $config)) {
-            foreach ($config['extensions'] as $extensionClass => $constructorArguments) {
-                $extension = $this->container->getService('extension.initializer')->initialize($extensionClass, $constructorArguments);
-
-                $extension->load($this->container);
-            }
-        }
-
         if (array_key_exists('parameters', $config)) {
             if (!is_array($config['parameters'])) {
                 throw new \RuntimeException("Parameters key in config.yml must be a valid array.");
@@ -206,6 +198,14 @@ class Kernel implements HttpKernelInterface
 
             foreach ($config['parameters'] as $id => $value) {
                 $this->container->setParameter($id, $value);
+            }
+        }
+
+        if (array_key_exists('extensions', $config)) {
+            foreach ($config['extensions'] as $extensionClass => $constructorArguments) {
+                $extension = $this->container->getService('extension.initializer')->initialize($extensionClass, $constructorArguments);
+
+                $extension->load($this->container);
             }
         }
     }
