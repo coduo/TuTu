@@ -81,11 +81,10 @@ class Kernel implements HttpKernelInterface
         $resourcesPath = $this->container->getParameter('tutu.root_path') . '/resources';
 
         if ($customPath = getenv('tutu_resources')) {
+            if (!file_exists($customPath)) {
+                throw new \RuntimeException(sprintf('Custom resources path \"%s\" does not exist.', $customPath));
+            }
             $resourcesPath = $customPath;
-        }
-
-        if (!file_exists($resourcesPath)) {
-            throw new \RuntimeException(sprintf('Resources path \"%s\" does not exist.', $resourcesPath));
         }
 
         $this->container->setParameter(
@@ -132,11 +131,10 @@ class Kernel implements HttpKernelInterface
         $responsesPath = $this->container->getParameter('tutu.root_path') . '/config/responses.yml';
 
         if ($customPath = getenv('tutu_responses')) {
+            if (!file_exists($customPath)) {
+                throw new \RuntimeException('Custom responses file not found at ' . $customPath);
+            }
             $responsesPath = $customPath;
-        }
-
-        if (!file_exists($responsesPath)) {
-            throw new \RuntimeException('Responses file not found at '.$responsesPath);
         }
 
         $this->container->setParameter(
