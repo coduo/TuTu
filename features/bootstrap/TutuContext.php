@@ -51,6 +51,7 @@ class TutuContext extends RawMinkContext implements SnippetAcceptingContext
         $fs->mkdir($this->workDir, 0777);
         chdir($this->workDir);
         $fs->mkdir($this->workDir . '/resources');
+        $fs->mkdir($this->workDir . '/config');
     }
 
     /**
@@ -94,18 +95,31 @@ class TutuContext extends RawMinkContext implements SnippetAcceptingContext
     }
 
     /**
+     * @Given there is a :filePath file with following content
+     */
+    public function thereIsAFileWithFollowingContent($filePath, PyStringNode $fileContent)
+    {
+        $fs = new Filesystem();
+        $fs->dumpFile($this->workDir . '/' . $filePath, (string) $fileContent);
+    }
+
+    /**
      * @Given there is a routing file :fileName with following content:
      * @Given there is a responses config file :fileName with following content:
+     * @Given there is a config file :fileName with following content:
      */
     public function thereIsARoutingFileWithFollowingContent($fileName, PyStringNode $fileContent)
     {
         $fs = new Filesystem();
-        $responsesConfigFilePath = $this->workDir . '/config/' . $fileName;
-        if ($fs->exists($responsesConfigFilePath)) {
-            $fs->remove($responsesConfigFilePath);
+        $configFilePath = $this->workDir . '/config/' . $fileName;
+        if ($fs->exists($configFilePath)) {
+            $fs->remove($configFilePath);
         }
 
-        $fs->dumpFile($responsesConfigFilePath, (string) $fileContent);
+        $content = (string) $fileContent;
+        $content = str_replace('%workDir%', $this->workDir, $content);
+
+        $fs->dumpFile($configFilePath, $content);
     }
 
     /**
@@ -120,6 +134,10 @@ class TutuContext extends RawMinkContext implements SnippetAcceptingContext
             '-S',
             sprintf('%s:%s', $host, $port)
         ]);
+        if (file_exists($this->workDir . '/config/config.yml')) {
+            $builder->setEnv('tutu_config', $this->workDir . '/config/config.yml');
+        }
+
         $builder->setEnv('tutu_responses', $this->workDir . '/config/responses.yml');
         $builder->setEnv('tutu_resources', $this->workDir . '/resources');
         $builder->setWorkingDirectory($this->webPath);

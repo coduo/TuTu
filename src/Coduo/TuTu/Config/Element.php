@@ -53,6 +53,14 @@ final class Element
     }
 
     /**
+     * @param Response $response
+     */
+    public function changeResponse(Response $response)
+    {
+        $this->response = $response;
+    }
+
+    /**
      * @return \Coduo\TuTu\Config\Element\Request
      */
     public function getRequest()

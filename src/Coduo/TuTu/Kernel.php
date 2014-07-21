@@ -4,11 +4,15 @@ namespace Coduo\TuTu;
 
 use Coduo\TuTu\Config\Loader\YamlLoader;
 use Coduo\TuTu\Config\Resolver;
+use Coduo\TuTu\Event\PreConfigResolve;
+use Coduo\TuTu\Event\RequestMatch;
 use Coduo\TuTu\Extension\Initializer;
 use Coduo\TuTu\Request\ChainMatchingPolicy;
 use Coduo\TuTu\Request\MethodMatchingPolicy;
 use Coduo\TuTu\Request\RouteMatchingPolicy;
 use Coduo\TuTu\Response\Builder;
+use Symfony\Component\ClassLoader\ClassLoader;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -40,8 +44,11 @@ class Kernel implements HttpKernelInterface
     {
         try {
             $this->loadConfiguration();
+            $request = $this->dispatchPreConfigResolveEvent($request);
             $configElement = $this->container->getService('response.config.resolver')->resolveConfigElement($request);
             if (isset($configElement)) {
+                $this->dispatchRequestMatchEvent($configElement);
+
                 return $this->container->getService('response.builder')->build($configElement, $request);
             }
             return $this->container->getService('response.builder')->buildForMismatch($request);
@@ -52,12 +59,21 @@ class Kernel implements HttpKernelInterface
 
     private function setUpContainer()
     {
+        $this->registerClassLoader();
         $this->registerTwig();
+        $this->registerEventDispatcher();
         $this->registerExtensionInitializer();
         $this->registerConfigLoader();
         $this->registerRequestMatchingPolicy();
         $this->registerConfigResolver();
         $this->registerResponseBuilder();
+    }
+
+    private function registerClassLoader()
+    {
+        $this->container->setStaticDefinition('class_loader', function ($container) {
+            return new ClassLoader();
+        });
     }
 
     private function registerTwig()
@@ -85,10 +101,23 @@ class Kernel implements HttpKernelInterface
         });
     }
 
+    private function registerEventDispatcher()
+    {
+        $this->container->setStaticDefinition('event_dispatcher' , function ($container) {
+            $eventDispatcher = new EventDispatcher();
+            $eventSubscribers = $container->getServicesByTag('event_dispatcher.subscriber');
+            foreach ($eventSubscribers as $subscriber) {
+                $eventDispatcher->addSubscriber($subscriber);
+            }
+
+            return $eventDispatcher;
+        });
+    }
+
     private function registerExtensionInitializer()
     {
         $this->container->setDefinition('extension.initializer', function ($container) {
-            return new Initializer();
+            return new Initializer($this->container->getService('class_loader'));
         });
     }
 
@@ -153,6 +182,10 @@ class Kernel implements HttpKernelInterface
     private function loadConfiguration()
     {
         $config = $this->parseConfiguration();
+        if (array_key_exists('autoload', $config)) {
+            $this->container->getService('class_loader')->addPrefixes($config['autoload']);
+        }
+
         if (array_key_exists('extensions', $config)) {
             foreach ($config['extensions'] as $extensionClass => $constructorArguments) {
                 $extension = $this->container->getService('extension.initializer')->initialize($extensionClass, $constructorArguments);
@@ -184,5 +217,31 @@ class Kernel implements HttpKernelInterface
         }
 
         return [];
+    }
+
+    /**
+     * @param $configElement
+     */
+    private function dispatchRequestMatchEvent($configElement)
+    {
+        $this->container->getService('event_dispatcher')->dispatch(
+            Events::REQUEST_MATCH,
+            new RequestMatch($configElement)
+        );
+    }
+
+    /**
+     * @param Request $request
+     * @return Request
+     */
+    private function dispatchPreConfigResolveEvent(Request $request)
+    {
+        $event = new PreConfigResolve($request);
+        $this->container->getService('event_dispatcher')->dispatch(
+            Events::PRE_CONFIG_RESOLVE,
+            $event
+        );
+
+        return $event->getRequest();
     }
 }

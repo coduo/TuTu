@@ -3,13 +3,29 @@
 namespace Coduo\TuTu\Extension;
 
 use Coduo\TuTu\Extension;
+use Symfony\Component\ClassLoader\ClassLoader;
 
 class Initializer
 {
+    /**
+     * @var \Symfony\Component\ClassLoader\ClassLoader
+     */
+    private $classLoader;
+
+    /**
+     * @param ClassLoader $classLoader
+     */
+    public function __construct(ClassLoader $classLoader)
+    {
+        $this->classLoader = $classLoader;
+    }
+
     public function initialize($extensionClass, $args = null)
     {
         if (!class_exists($extensionClass)) {
-            throw new \InvalidArgumentException(sprintf("%s is not valid class.", $extensionClass));
+            if (true !== $this->classLoader->loadClass($extensionClass)) {
+                throw new \InvalidArgumentException(sprintf("%s is not valid class.", $extensionClass));
+            }
         }
 
         $extensionReflection = new \ReflectionClass($extensionClass);
