@@ -79,18 +79,24 @@ class Kernel implements HttpKernelInterface
     private function registerTwig()
     {
         $resourcesPath = $this->container->getParameter('tutu.root_path') . '/resources';
-        if ($customPath = getenv('tutu_resources')) {
-            if (!file_exists($customPath)) {
-                throw new \RuntimeException('Custom resources path not found at '.$customPath);
-            }
 
+        if ($customPath = getenv('tutu_resources')) {
             $resourcesPath = $customPath;
         }
 
-        $this->container->setStaticDefinition('twig' ,function ($container) use ($resourcesPath) {
+        if (!file_exists($resourcesPath)) {
+            throw new \RuntimeException(sprintf('Resources path \"%s\" does not exist.', $resourcesPath));
+        }
+
+        $this->container->setParameter(
+            'resources_path',
+            $resourcesPath
+        );
+
+        $this->container->setStaticDefinition('twig' ,function ($container) {
             $stringLoader = new \Twig_Loader_String();
             $filesystemLoader = new \Twig_Loader_Filesystem();
-            $filesystemLoader->addPath($resourcesPath, 'resources');
+            $filesystemLoader->addPath($container->getParameter('resources_path'), 'resources');
 
             $loader = new \Twig_Loader_Chain([$filesystemLoader, $stringLoader]);
             $twig = new \Twig_Environment($loader, [
@@ -124,21 +130,22 @@ class Kernel implements HttpKernelInterface
     private function registerConfigLoader()
     {
         $responsesPath = $this->container->getParameter('tutu.root_path') . '/config/responses.yml';
-        if ($customPath = getenv('tutu_responses')) {
-            if (!file_exists($customPath)) {
-                throw new \RuntimeException('Custom responses file not found at '.$customPath);
-            }
 
+        if ($customPath = getenv('tutu_responses')) {
             $responsesPath = $customPath;
         }
 
+        if (!file_exists($responsesPath)) {
+            throw new \RuntimeException('Responses file not found at '.$responsesPath);
+        }
+
         $this->container->setParameter(
-            'response.config.yaml.path',
+            'responses_file_path',
             $responsesPath
         );
 
         $this->container->setDefinition('response.config.loader.yaml', function ($container) {
-            return new YamlLoader($container->getParameter('response.config.yaml.path'));
+            return new YamlLoader($container->getParameter('responses_file_path'));
         });
     }
 
@@ -191,6 +198,16 @@ class Kernel implements HttpKernelInterface
                 $extension = $this->container->getService('extension.initializer')->initialize($extensionClass, $constructorArguments);
 
                 $extension->load($this->container);
+            }
+        }
+
+        if (array_key_exists('parameters', $config)) {
+            if (!is_array($config['parameters'])) {
+                throw new \RuntimeException("Parameters key in config.yml must be a valid array.");
+            }
+
+            foreach ($config['parameters'] as $id => $value) {
+                $this->container->setParameter($id, $value);
             }
         }
     }
