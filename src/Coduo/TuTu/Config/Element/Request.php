@@ -27,6 +27,11 @@ class Request
     private $query;
 
     /**
+     * @var array
+     */
+    private $headers;
+
+    /**
      * @param $path
      */
     public function __construct($path)
@@ -36,6 +41,7 @@ class Request
         $this->allowedMethods = [];
         $this->request = [];
         $this->query = [];
+        $this->headers = [];
     }
 
     public static function fromArray(array $arrayConfig)
@@ -47,6 +53,7 @@ class Request
         $responseConfig->setAllowedMethods($config['methods']);
         $responseConfig->setBodyParameters($config['request']);
         $responseConfig->setQueryParameters($config['query']);
+        $responseConfig->setHeaders($config['headers']);
 
         return $responseConfig;
     }
@@ -126,6 +133,30 @@ class Request
     }
 
     /**
+     * @return boolean
+     */
+    public function hasHeaders()
+    {
+        return (boolean) count($this->headers);
+    }
+
+    /**
+     * @param array $headers
+     */
+    public function setHeaders($headers)
+    {
+        $this->headers = $headers;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHeaders()
+    {
+        return $this->headers;
+    }
+
+    /**
      * @param $path
      * @throws \InvalidArgumentException
      */
@@ -150,13 +181,15 @@ class Request
         $configResolver->setDefaults([
             'methods' => [],
             'request' => [],
-            'query' => []
+            'query' => [],
+            'headers' => []
         ]);
         $configResolver->setAllowedTypes([
             'path' => 'string',
             'methods' => 'array',
             'request' => 'array',
-            'query' => 'array'
+            'query' => 'array',
+            'headers' => 'array'
         ]);
 
         return $configResolver;

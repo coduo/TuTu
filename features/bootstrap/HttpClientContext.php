@@ -9,6 +9,12 @@ use Behat\Testwork\Tester\Result\TestResult;
 
 class HttpClientContext extends RawMinkContext implements SnippetAcceptingContext
 {
+    private $headersToRemove;
+
+    public function __construct()
+    {
+        $this->headersToRemove = [];
+    }
 
     /** @AfterScenario */
     public function printLastResponseWhenScenarioFail(AfterScenarioScope $scope)
@@ -17,6 +23,15 @@ class HttpClientContext extends RawMinkContext implements SnippetAcceptingContex
             echo "Last response:\n";
             echo "Code " . $this->getSession()->getStatusCode() . "\n";
             $this->printLastResponse();
+        }
+    }
+
+    /** @AfterScenario */
+    public function removeRemainingHeaders()
+    {
+        $client = $this->getSession()->getDriver()->getClient();
+        foreach ($this->headersToRemove as $header) {
+            $client->removeHeader($header);
         }
     }
 
@@ -121,5 +136,22 @@ class HttpClientContext extends RawMinkContext implements SnippetAcceptingContex
         $client = $session->getDriver()->getClient();
         $client->followRedirects(false);
         $client->request($method, $url, $parameters);
+    }
+
+    /**
+     * @When http client send :method request on :url with following headers
+     */
+    public function httpClientSendGetRequestOnWithFollowingHeaders($method, $url, TableNode $headersTable)
+    {
+        $session = $this->getSession();
+        $client = $session->getDriver()->getClient();
+        $headers = [];
+        foreach ($headersTable->getHash() as $headerData) {
+            $client->setHeader($headerData['Header'], $headerData['Value']);
+            $headers[] = $headerData['Header'];
+        }
+
+        $client->followRedirects(false);
+        $client->request($method, $url, [], [], $headers);
     }
 }
