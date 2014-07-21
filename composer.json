@@ -12,6 +12,7 @@
         "symfony/options-resolver": "~2.3",
         "symfony/event-dispatcher": "~2.3",
         "symfony/class-loader": "~2.3",
+        "symfony/yaml": "~2.3",
         "twig/twig": "1.*",
         "coduo/tutu-faker-extension": "1.0.*@dev"
     },
