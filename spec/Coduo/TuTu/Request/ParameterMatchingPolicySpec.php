@@ -2,6 +2,7 @@
 
 namespace spec\Coduo\TuTu\Request;
 
+use Coduo\PHPMatcher\Factory\SimpleFactory;
 use Coduo\TuTu\Config\Element;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -9,6 +10,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ParameterMatchingPolicySpec extends ObjectBehavior
 {
+    function let()
+    {
+        $phpMatcher = (new SimpleFactory())->createMatcher();
+        $this->beConstructedWith($phpMatcher);
+    }
+
     function it_is_matching_policy()
     {
         $this->shouldBeAnInstanceOf('Coduo\TuTu\Request\MatchingPolicy');

@@ -2,6 +2,7 @@
 
 namespace Coduo\TuTu;
 
+use Coduo\PHPMatcher\Factory\SimpleFactory;
 use Coduo\TuTu\Config\Loader\YamlLoader;
 use Coduo\TuTu\Config\Resolver;
 use Coduo\TuTu\Event\PreConfigResolve;
@@ -62,6 +63,7 @@ class Kernel implements HttpKernelInterface
     private function setUpContainer()
     {
         $this->registerClassLoader();
+        $this->registerPHPMatcher();
         $this->registerTwig();
         $this->registerEventDispatcher();
         $this->registerExtensionInitializer();
@@ -75,6 +77,13 @@ class Kernel implements HttpKernelInterface
     {
         $this->container->setStaticDefinition('class_loader', function ($container) {
             return new ClassLoader();
+        });
+    }
+
+    private function registerPHPMatcher()
+    {
+        $this->container->setStaticDefinition('php_matcher', function ($container) {
+            return (new SimpleFactory())->createMatcher();
         });
     }
 
@@ -158,10 +167,10 @@ class Kernel implements HttpKernelInterface
             return new RouteMatchingPolicy();
         }, ['matching_policy']);
         $this->container->setDefinition('request.matching_policy.parameter', function($container) {
-            return new ParameterMatchingPolicy();
+            return new ParameterMatchingPolicy($container->getService('php_matcher'));
         }, ['matching_policy']);
         $this->container->setDefinition('request.matching_policy.headers', function($container) {
-            return new HeadersMatchingPolicy();
+            return new HeadersMatchingPolicy($container->getService('php_matcher'));
         }, ['matching_policy']);
 
         $this->container->setDefinition('request.matching_policy', function ($container) {
