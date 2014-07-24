@@ -8,6 +8,7 @@ use Coduo\TuTu\Config\Resolver;
 use Coduo\TuTu\Event\PreConfigResolve;
 use Coduo\TuTu\Event\RequestMatch;
 use Coduo\TuTu\Extension\Initializer;
+use Coduo\TuTu\Request\BodyMatchingPolicy;
 use Coduo\TuTu\Request\ChainMatchingPolicy;
 use Coduo\TuTu\Request\HeadersMatchingPolicy;
 use Coduo\TuTu\Request\MethodMatchingPolicy;
@@ -172,6 +173,10 @@ class Kernel implements HttpKernelInterface
         $this->container->setDefinition('request.matching_policy.headers', function($container) {
             return new HeadersMatchingPolicy($container->getService('php_matcher'));
         }, ['matching_policy']);
+        $this->container->setDefinition('request.matching_policy.body', function($container) {
+            return new BodyMatchingPolicy($container->getService('php_matcher'));
+        }, ['matching_policy']);
+
 
         $this->container->setDefinition('request.matching_policy', function ($container) {
             $matchingPolicy = new ChainMatchingPolicy();

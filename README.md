@@ -63,6 +63,7 @@ hello_world_get:
     query: []
     request: []
     headers: []
+    body: ""
   response:
     content: "This is nothing more than twig template"
     status: 200
@@ -77,11 +78,14 @@ As you can see there are few was to customize TuTu responses.
 * ``request.request`` - optional. When not empty it will match only request that contain body ($_POST) parameters.
 * ``request.query`` - optional. When not empty it will match only request that contain query ($_GET) parameters.
 * ``request.headers`` - optional. When not empty it will match only request that contain specified headers.
+* ``request.body`` - optional. When not empty it will match only request that contain specified body.
 * ``response.content`` - optional. Content is nothing more that twig template rendered before passed to response.
 * ``response.status`` - optional. Response code
 * ``response.headers`` - optional. Headers added to response Must be a valid array
 
 In content template you have access to all twig features. You can also use ``request`` variable to access request data.
+
+**Request query, headers, request and body configuration may contain [coduo/php-matcher patterns](https://github.com/coduo/php-matcher#available-patterns).**
 
 ## Load response content from file
 

@@ -154,4 +154,16 @@ class HttpClientContext extends RawMinkContext implements SnippetAcceptingContex
         $client->followRedirects(false);
         $client->request($method, $url, [], [], $headers);
     }
+
+    /**
+     * @When http client send :method request on :url with body
+     */
+    public function httpClientSendGetRequestOnWithBody($method, $url, PyStringNode $body)
+    {
+        $session = $this->getSession();
+        $client = $session->getDriver()->getClient();
+
+        $client->followRedirects(false);
+        $client->request($method, $url, [], [], [], (string) $body, (string) $body);
+    }
 }

@@ -32,6 +32,11 @@ class Request
     private $headers;
 
     /**
+     * @var string
+     */
+    private $body;
+
+    /**
      * @param $path
      */
     public function __construct($path)
@@ -42,6 +47,7 @@ class Request
         $this->request = [];
         $this->query = [];
         $this->headers = [];
+        $this->body = '';
     }
 
     public static function fromArray(array $arrayConfig)
@@ -54,6 +60,7 @@ class Request
         $responseConfig->setBodyParameters($config['request']);
         $responseConfig->setQueryParameters($config['query']);
         $responseConfig->setHeaders($config['headers']);
+        $responseConfig->setBody($config['body']);
 
         return $responseConfig;
     }
@@ -157,6 +164,30 @@ class Request
     }
 
     /**
+     * @return bool
+     */
+    public function hasBody()
+    {
+        return !empty($this->body);
+    }
+
+    /**
+     * @param string $body
+     */
+    public function setBody($body)
+    {
+        $this->body = $body;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBody()
+    {
+        return $this->body;
+    }
+
+    /**
      * @param $path
      * @throws \InvalidArgumentException
      */
@@ -182,14 +213,16 @@ class Request
             'methods' => [],
             'request' => [],
             'query' => [],
-            'headers' => []
+            'headers' => [],
+            'body' => ''
         ]);
         $configResolver->setAllowedTypes([
             'path' => 'string',
             'methods' => 'array',
             'request' => 'array',
             'query' => 'array',
-            'headers' => 'array'
+            'headers' => 'array',
+            'body' => 'string'
         ]);
 
         return $configResolver;
