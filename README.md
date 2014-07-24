@@ -109,6 +109,21 @@ Above configuration is going to load content from hello_world.twig.html file pre
 Hello {{ request.request.get('name') }}!
 ```
 
+## Configuration
+TuTu have also configuration file where you can set up few things.
+```
+# config/config.yml
+parameters:
+  resources_path: '/var/www/tutu/custom_resources' # empty by default
+  responses_file_path: '/var/www/tutu/config/custom_responses.yml' # empty by default
+  twig: # optional, must be a valid array. Passed to twig env
+    debug: true
+    auto_reload: true
+
+extensions:
+  Coduo\TuTu\Extension\Faker: ~
+```
+
 ## Extensions
 
 Because there is no such thing as perfect tool TuTu allows you to create extensions.
@@ -133,3 +148,61 @@ extensions:
 In above example extension ``Coduo\TuTu\Extension\Faker`` is going to be created with one argument with value "pl_PL".
 
 **Keep in mind that Faker extension is available in TuTu by default. You don't need to enable it manually.**
+
+## Few Examples
+
+
+```
+# config/responses.yml
+
+client_token_grant:
+  request:
+    path: "/oauth/v2/token"
+    query:
+      "client_id": "CLIENT_VALID_ID"
+      "client_secret": "CLIENT_VALID_SECRET"
+      "grant_type": "client_credentials"
+  response:
+    content: "@resources/oauth2/client_token_grant.json.twig"
+    headers:
+      Content-Type: application/json
+
+missing_grant_type:
+  request:
+    path: "/oauth/v2/token"
+  response:
+    content: "@resources/oauth2/missing_grant_type.json.twig"
+    status: 400
+    headers:
+      Content-Type: "application/json"
+
+register_customer:
+  request:
+    path: "/api/customer"
+    methods: ['POST']
+    headers:
+      Authorization: "Bearer VALID_CLIENT_ACCESS_TOKEN"
+    body: |
+      {
+        "email": @string@,
+        "plainPassword": @string@,
+        "firstName": @string@,
+        "lastName": @string@
+      }
+  response:
+    content: "@resources/api/customer/register_customer.json.twig"
+    headers:
+      Content-Type: application/json
+
+register_with_missing_parameters:
+  request:
+    path: "/api/customer"
+    methods: ['POST']
+    headers:
+      Authorization: "Bearer VALID_CLIENT_ACCESS_TOKEN"
+  response:
+    content: "@resources/api/customer/register_missing_parameters.json.twig"
+    status: 422
+    headers:
+      Content-Type: application/json
+```

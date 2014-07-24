@@ -104,15 +104,20 @@ class Kernel implements HttpKernelInterface
             $resourcesPath
         );
 
-        $this->container->setStaticDefinition('twig' ,function ($container) {
+        $this->container->setStaticDefinition('twig_loader', function ($container) {
             $stringLoader = new \Twig_Loader_String();
             $filesystemLoader = new \Twig_Loader_Filesystem();
             $filesystemLoader->addPath($container->getParameter('resources_path'), 'resources');
+            return new \Twig_Loader_Chain([$filesystemLoader, $stringLoader]);
+        });
 
-            $loader = new \Twig_Loader_Chain([$filesystemLoader, $stringLoader]);
-            $twig = new \Twig_Environment($loader, [
-                'cache' => $container->getParameter('tutu.root_path') . '/var/twig',
-            ]);
+        $this->container->setStaticDefinition('twig' ,function ($container) {
+            $defaultOptions = ['cache' => $container->getParameter('tutu.root_path') . '/var/twig'];
+            $options = $container->hasParameter('twig') && is_array($container->getParameter('twig'))
+                ? array_merge($defaultOptions, $container->getParameter('twig'))
+                : $defaultOptions;
+
+            $twig = new \Twig_Environment($container->getService('twig_loader'), $options);
 
             return $twig;
         });

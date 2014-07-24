@@ -1,2 +1,7 @@
+parameters:
+  twig:
+    debug: true
+    auto_reload: true;
+
 extensions:
   Coduo\TuTu\Extension\Faker: ~
