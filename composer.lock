@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7dbf9e8be2f2aa450086217cd99100e7",
+    "hash": "b45a25ec20165fc01495685864b3eff4",
     "packages": [
         {
             "name": "coduo/php-matcher",
@@ -164,6 +164,50 @@
             ],
             "description": "This extensions integrates fzaninotto/faker with TuTu.",
             "time": "2014-07-14 11:20:31"
+        },
+        {
+            "name": "coduo/tutu-twig-extension",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/coduo/tutu-twig-extension.git",
+                "reference": "129543db25a50cd7bbdf67707dc9da0d64f2a6be"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/coduo/tutu-twig-extension/zipball/129543db25a50cd7bbdf67707dc9da0d64f2a6be",
+                "reference": "129543db25a50cd7bbdf67707dc9da0d64f2a6be",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "twig/twig": "1.*"
+            },
+            "require-dev": {
+                "behat/behat": "3.0.*",
+                "behat/mink-extension": "~2.0@dev",
+                "behat/mink-goutte-driver": "~1.0@dev",
+                "bossa/phpspec2-expect": "dev-master",
+                "coduo/tutu": "1.0.*@dev",
+                "coduo/tutu-faker-extension": "1.0.*@dev"
+            },
+            "type": "project",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Adds new features to TuTu twig templates engine.",
+            "time": "2014-07-26 13:35:49"
         },
         {
             "name": "fzaninotto/faker",
@@ -2275,6 +2319,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "coduo/tutu-faker-extension": 20,
+        "coduo/tutu-twig-extension": 20,
         "behat/mink-extension": 20,
         "behat/mink-goutte-driver": 20,
         "bossa/phpspec2-expect": 20
