@@ -3,10 +3,12 @@ Feature: Create response when cant match request
   In order know when my request cant be handled
   I expect response with constant message and specific header in such situation
 
+  Background:
+    Given TuTu is running on host "localhost" at port "8000"
+
   Scenario: Create response when cant match request
-    Given there is a empty responses config file "responses.yml"
-    And TuTu is running on host "localhost" at port "8000"
-    When http client send GET request on "http://localhost:8000/hello/world"
+    When there is a empty responses config file "responses.yml"
+    And http client sends GET request on "http://localhost:8000/hello/world"
     Then response status code should be 404
     And the response content should be equal to:
     """
@@ -17,7 +19,7 @@ Feature: Create response when cant match request
       | TuTu-Error  | Request mismatch |
 
   Scenario: Create response for internal error
-    Given there is a responses config file "responses.yml" with following content:
+    When there is a responses config file "responses.yml" with following content:
     """
     hello_world:
       request:
@@ -26,8 +28,7 @@ Feature: Create response when cant match request
         content: |
           Hello {% rwqrqwr %}
     """
-    And TuTu is running on host "localhost" at port "8000"
-    When http client send GET request on "http://localhost:8000/hello/world"
+    And http client sends GET request on "http://localhost:8000/hello/world"
     Then response status code should be 500
     And the response content should be equal to:
     """

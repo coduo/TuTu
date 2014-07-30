@@ -3,8 +3,11 @@ Feature: Create echo response
   In order to simulate simple api behavior
   I need to create response configuration that returns data from request
 
+  Background:
+    Given  TuTu is running on host "localhost" at port "8000"
+
   Scenario: Create response from request parameters
-    Given there is a responses config file "responses.yml" with following content:
+    When there is a responses config file "responses.yml" with following content:
     """
     hello_world:
       request:
@@ -13,8 +16,8 @@ Feature: Create echo response
         content: |
           Hello {{ request.request.get('name') }}!
     """
-    And TuTu is running on host "localhost" at port "8000"
-    When http client send POST request on "http://localhost:8000/hello/world" with following parameters:
+
+    And http client sends POST request on "http://localhost:8000/hello/world" with following parameters:
       | Parameter | Value   |
       | name      | Norbert |
     Then response status code should be 200
@@ -24,7 +27,7 @@ Feature: Create echo response
     """
 
   Scenario: Create response from request parameters with placeholders
-    Given there is a responses config file "responses.yml" with following content:
+    When there is a responses config file "responses.yml" with following content:
     """
     item_details:
       request:
@@ -33,8 +36,7 @@ Feature: Create echo response
         content: |
           Hello From photo
     """
-    And TuTu is running on host "localhost" at port "8000"
-    When http client send POST request on "http://localhost:8000/products/1/photos/1"
+    And http client sends POST request on "http://localhost:8000/products/1/photos/1"
     Then response status code should be 200
     And the response content should be equal to:
     """
@@ -42,7 +44,7 @@ Feature: Create echo response
     """
 
   Scenario: Create response from request query parameters
-    Given there is a responses config file "responses.yml" with following content:
+    When there is a responses config file "responses.yml" with following content:
     """
     hello_world:
       request:
@@ -51,8 +53,7 @@ Feature: Create echo response
         content: |
           Hello {{ request.query.get('name') }}!
     """
-    And TuTu is running on host "localhost" at port "8000"
-    When http client send GET request on "http://localhost:8000/hello/world?name=Norbert"
+    And http client sends GET request on "http://localhost:8000/hello/world?name=Norbert"
     Then response status code should be 200
     And the response content should be equal to:
     """

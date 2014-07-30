@@ -3,13 +3,16 @@ Feature: Create response from routing.yml file
   In order to simulate simple api behavior
   I need to create routing.yml file with responses for specific requests
 
+  Background:
+    Given TuTu is running on host "localhost" at port "8000"
+
   Scenario: Include config file in responses.yml file
-    Given there is a responses config file "responses.yml" with following content:
+    When there is a responses config file "responses.yml" with following content:
     """
     includes:
       - api.yml
     """
-    Given there is a responses config file "api.yml" with following content:
+    And there is a responses config file "api.yml" with following content:
     """
     hello_world:
       request:
@@ -17,8 +20,7 @@ Feature: Create response from routing.yml file
       response:
         content: "Hello world"
     """
-    And TuTu is running on host "localhost" at port "8000"
-    When http client send GET request on "http://localhost:8000/hello/world"
+    When http client sends GET request on "http://localhost:8000/hello/world"
     Then response status code should be 200
     And the response content should be equal to:
     """
@@ -26,7 +28,7 @@ Feature: Create response from routing.yml file
     """
 
   Scenario: Include responses file that include another file
-    Given there is a responses config file "responses.yml" with following content:
+    When there is a responses config file "responses.yml" with following content:
     """
     includes:
       - api/api.yml
@@ -44,8 +46,7 @@ Feature: Create response from routing.yml file
       response:
         content: "Hello world"
     """
-    And TuTu is running on host "localhost" at port "8000"
-    When http client send GET request on "http://localhost:8000/hello/world"
+    When http client sends GET request on "http://localhost:8000/hello/world"
     Then response status code should be 200
     And the response content should be equal to:
     """

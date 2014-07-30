@@ -3,8 +3,11 @@ Feature: Create response from routing.yml file
   In order to simulate simple api behavior
   I need to create routing.yml file with responses for specific requests
 
+  Background:
+    Given TuTu is running on host "localhost" at port "8000"
+
   Scenario: Create response with default response code and static body
-    Given there is a responses config file "responses.yml" with following content:
+    When there is a responses config file "responses.yml" with following content:
     """
     hello_world:
       request:
@@ -21,8 +24,7 @@ Feature: Create response from routing.yml file
           </body>
           </html>
     """
-    And TuTu is running on host "localhost" at port "8000"
-    When http client send GET request on "http://localhost:8000/hello/world"
+    And http client sends GET request on "http://localhost:8000/hello/world"
     Then response status code should be 200
     And the response content should be equal to:
     """
@@ -38,7 +40,7 @@ Feature: Create response from routing.yml file
     """
 
   Scenario: Create response with custom status code
-    Given there is a responses config file "responses.yml" with following content:
+    When there is a responses config file "responses.yml" with following content:
     """
     empty:
       request:
@@ -46,13 +48,12 @@ Feature: Create response from routing.yml file
       response:
         status: 204
     """
-    And TuTu is running on host "localhost" at port "8000"
-    When http client send GET request on "http://localhost:8000/empty?wqeqwqw=qweq"
+    And http client sends GET request on "http://localhost:8000/empty?wqeqwqw=qweq"
     Then response status code should be 204
     And the response content should be empty
 
   Scenario: Create response with custom headers
-    Given there is a responses config file "responses.yml" with following content:
+    When there is a responses config file "responses.yml" with following content:
     """
     json:
       request:
@@ -61,8 +62,7 @@ Feature: Create response from routing.yml file
         headers:
           "Content-Type": "application/json"
     """
-    And TuTu is running on host "localhost" at port "8000"
-    When http client send GET request on "http://localhost:8000/api/json"
+    And http client sends GET request on "http://localhost:8000/api/json"
     Then response status code should be 200
     And the response content should be empty
     And response should have following hedaers:
