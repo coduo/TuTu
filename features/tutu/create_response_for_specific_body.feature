@@ -3,8 +3,11 @@ Feature: Create response for specific body
   In order to simulate simple api behavior
   I need to create be able to create different responses based on request body
 
+  Background:
+    Given TuTu is running on host "localhost" at port "8000"
+
   Scenario: Create response when request body match
-    Given there is a responses config file "responses.yml" with following content:
+    When there is a responses config file "responses.yml" with following content:
     """
     hello_world_with_param:
       request:
@@ -25,8 +28,7 @@ Feature: Create response for specific body
       response:
         content: "Hello World"
     """
-    And TuTu is running on host "localhost" at port "8000"
-    When http client send POST request on "http://localhost:8000/register" with body
+    And http client sends POST request on "http://localhost:8000/register" with body
     """
     {
       "email": "norbert@coduo.pl",
@@ -42,7 +44,7 @@ Feature: Create response for specific body
     """
 
   Scenario: Create response when request body match pattern
-    Given there is a responses config file "responses.yml" with following content:
+    When there is a responses config file "responses.yml" with following content:
     """
     hello_world_with_param:
       request:
@@ -64,8 +66,7 @@ Feature: Create response for specific body
       response:
         content: "Hello World"
     """
-    And TuTu is running on host "localhost" at port "8000"
-    When http client send POST request on "http://localhost:8000/register" with body
+    And http client sends POST request on "http://localhost:8000/register" with body
     """
     {
       "id" : 1,

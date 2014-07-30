@@ -3,8 +3,11 @@ Feature: Create response for specific headers
   In order to simulate simple api behavior
   I need to create be able to create different responses based on request headers
 
+  Background:
+    Given TuTu is running on host "localhost" at port "8000"
+
   Scenario: Create response when request headers
-    Given there is a responses config file "responses.yml" with following content:
+    When there is a responses config file "responses.yml" with following content:
     """
     hello_world_with_param:
       request:
@@ -22,8 +25,7 @@ Feature: Create response for specific headers
       response:
         content: "Hello World"
     """
-    And TuTu is running on host "localhost" at port "8000"
-    When http client send GET request on "http://localhost:8000/request" with following headers
+    And http client sends GET request on "http://localhost:8000/request" with following headers
       | Header | Value |
       | Hello  | World |
     Then response status code should be 200
@@ -33,7 +35,7 @@ Feature: Create response for specific headers
     """
 
   Scenario: Create response when request headers match pattern
-    Given there is a responses config file "responses.yml" with following content:
+    When there is a responses config file "responses.yml" with following content:
     """
     hello_world_with_param:
       request:
@@ -51,8 +53,7 @@ Feature: Create response for specific headers
       response:
         content: "Hello World"
     """
-    And TuTu is running on host "localhost" at port "8000"
-    When http client send GET request on "http://localhost:8000/request" with following headers
+    And http client sends GET request on "http://localhost:8000/request" with following headers
       | Header | Value |
       | Hello  | World |
     Then response status code should be 200

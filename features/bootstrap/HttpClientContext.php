@@ -112,7 +112,7 @@ class HttpClientContext extends RawMinkContext implements SnippetAcceptingContex
 
 
     /**
-     * @When http client send :method request on :url
+     * @When http client sends :method request on :url
      */
     public function httpClientSendGetRequestOn($method, $url)
     {
@@ -124,7 +124,7 @@ class HttpClientContext extends RawMinkContext implements SnippetAcceptingContex
     }
 
     /**
-     * @When http client send :method request on :url with following parameters:
+     * @When http client sends :method request on :url with following parameters:
      */
     public function httpClientSendPostRequestOnWithFollowingParameters($method, $url, TableNode $parametersTable)
     {
@@ -139,7 +139,7 @@ class HttpClientContext extends RawMinkContext implements SnippetAcceptingContex
     }
 
     /**
-     * @When http client send :method request on :url with following headers
+     * @When http client sends :method request on :url with following headers
      */
     public function httpClientSendGetRequestOnWithFollowingHeaders($method, $url, TableNode $headersTable)
     {
@@ -156,7 +156,7 @@ class HttpClientContext extends RawMinkContext implements SnippetAcceptingContex
     }
 
     /**
-     * @When http client send :method request on :url with body
+     * @When http client sends :method request on :url with body
      */
     public function httpClientSendGetRequestOnWithBody($method, $url, PyStringNode $body)
     {

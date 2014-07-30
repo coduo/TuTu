@@ -19,7 +19,7 @@ Feature: Create echo response
     """
 
     And TuTu is running on host "localhost" at port "8000"
-    When http client send GET request on "http://localhost:8000/hello/world"
+    When http client sends GET request on "http://localhost:8000/hello/world"
     Then response status code should be 200
     And the response content should be equal to:
     """
@@ -50,7 +50,7 @@ Feature: Create echo response
     """
 
     And TuTu is running on host "localhost" at port "8000"
-    When http client send GET request on "http://localhost:8000/hello/world"
+    When http client sends GET request on "http://localhost:8000/hello/world"
     Then response status code should be 200
     And the response content should be equal to:
     """
