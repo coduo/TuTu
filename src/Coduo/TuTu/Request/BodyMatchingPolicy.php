@@ -14,6 +14,14 @@ class BodyMatchingPolicy implements MatchingPolicy
     private $phpMatcher;
 
     /**
+     * @param Matcher $phpMatcher
+     */
+    public function __construct(Matcher $phpMatcher)
+    {
+        $this->phpMatcher = $phpMatcher;
+    }
+
+    /**
      * @param Request $request
      * @param Element $config
      * @return boolean
@@ -29,10 +37,5 @@ class BodyMatchingPolicy implements MatchingPolicy
         }
 
         return true;
-    }
-
-    public function __construct(Matcher $phpMatcher)
-    {
-        $this->phpMatcher = $phpMatcher;
     }
 }
