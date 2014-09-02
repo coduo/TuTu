@@ -13,6 +13,7 @@ use Coduo\TuTu\Request\ChainMatchingPolicy;
 use Coduo\TuTu\Request\HeadersMatchingPolicy;
 use Coduo\TuTu\Request\MethodMatchingPolicy;
 use Coduo\TuTu\Request\ParameterMatchingPolicy;
+use Coduo\TuTu\Request\Path\Parser;
 use Coduo\TuTu\Request\RouteMatchingPolicy;
 use Coduo\TuTu\Response\Builder;
 use Symfony\Component\ClassLoader\ClassLoader;
@@ -206,8 +207,11 @@ class Kernel implements HttpKernelInterface
 
     private function registerResponseBuilder()
     {
+        $this->container->setDefinition('request.path.parser', function($container) {
+            return new Parser();
+        });
         $this->container->setDefinition('response.builder', function ($container) {
-            return new Builder($container->getService('twig'));
+            return new Builder($container->getService('twig'), $container->getService('request.path.parser'));
         });
     }
 

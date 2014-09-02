@@ -3,6 +3,7 @@
 namespace Coduo\TuTu\Response;
 
 use Coduo\TuTu\Config\Element;
+use Coduo\TuTu\Request\Path\Parser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -13,9 +14,15 @@ class Builder
      */
     private $twig;
 
-    public function __construct(\Twig_Environment $twig)
+    /**
+     * @var \Coduo\TuTu\Request\Path\Parser
+     */
+    private $requestParser;
+
+    public function __construct(\Twig_Environment $twig, Parser $requestParser)
     {
         $this->twig = $twig;
+        $this->requestParser = $requestParser;
     }
 
     /**
@@ -26,7 +33,8 @@ class Builder
     public function build(Element $config, Request $request)
     {
         $content = $this->twig->render($config->getResponse()->getContent(), [
-            'request' => $request
+            'request' => $request,
+            'path' => $this->requestParser->extractPlaceholders($request, $config->getRequest()->getPath())
         ]);
 
         return new Response($content, $config->getResponse()->getStatus(), $config->getResponse()->getHeaders());
