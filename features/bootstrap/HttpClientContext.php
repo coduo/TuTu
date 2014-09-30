@@ -51,7 +51,7 @@ class HttpClientContext extends RawMinkContext implements SnippetAcceptingContex
     public function responseStatusCodeShouldBe($expectedStatus)
     {
         $status = $this->getSession()->getStatusCode();
-        if ($status !== (int) $expectedStatus) {
+        if ($status !== $expectedStatus) {
             throw new \RuntimeException(sprintf("Status %d is not equal to %d.", $status, (int) $expectedStatus));
         }
     }
@@ -62,7 +62,7 @@ class HttpClientContext extends RawMinkContext implements SnippetAcceptingContex
     public function theResponseContentShouldBeEqualTo(PyStringNode $expectedContent)
     {
         $content = $this->getSession()->getDriver()->getContent();
-        if ($content !== (string) $expectedContent) {
+        if ((string) $content !== (string) $expectedContent) {
             throw new \RuntimeException("Content is different than expected.");
         }
     }
