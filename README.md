@@ -1,6 +1,7 @@
 #TuTu
 
 [![Build Status](https://travis-ci.org/coduo/TuTu.svg?branch=master)](https://travis-ci.org/coduo/TuTu)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/coduo/TuTu/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/coduo/TuTu/?branch=master)
 
 Flexible HTTP server mocking tool in PHP. TuTu can work with build in php server so everything that you need to use it is php.
 It can be used to simulate any kind of web application behavior. We are going to use TuTu during api clients tests.
