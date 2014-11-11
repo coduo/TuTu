@@ -6,6 +6,10 @@
     "autoload": {
         "psr-0": { "Coduo\\TuTu\\": "" }
     },
+    "autoload-dev": {
+        "psr-0": { "Coduo\\TuTu\\spec": "spec/" }
+    },
+    "target-dir": "Coduo/TuTu",
     "require": {
         "php": ">=5.4.0",
         "symfony/http-kernel": "~2.3",
