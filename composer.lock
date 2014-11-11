@@ -4,24 +4,25 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "eb32259fd1af300d7f28d0e72edc5267",
+    "hash": "32822535c8e44bb3b6120f68f3519fbc",
     "packages": [
         {
             "name": "coduo/php-matcher",
-            "version": "1.0.7",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/coduo/php-matcher.git",
-                "reference": "092b13e3943b12ad03770330851cda10cd094be0"
+                "reference": "4e37e27669eb56e7fe1198976ff519197b9cac52"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coduo/php-matcher/zipball/092b13e3943b12ad03770330851cda10cd094be0",
-                "reference": "092b13e3943b12ad03770330851cda10cd094be0",
+                "url": "https://api.github.com/repos/coduo/php-matcher/zipball/4e37e27669eb56e7fe1198976ff519197b9cac52",
+                "reference": "4e37e27669eb56e7fe1198976ff519197b9cac52",
                 "shasum": ""
             },
             "require": {
-                "coduo/php-to-string": "1.0.*",
+                "coduo/php-to-string": "~1.0",
+                "doctrine/lexer": "1.0.*",
                 "openlss/lib-array2xml": "0.0.9",
                 "php": ">=5.3.0",
                 "symfony/expression-language": "~2.4",
@@ -33,7 +34,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1-dev"
+                    "dev-master": "1.2-dev"
                 }
             },
             "autoload": {
@@ -64,7 +65,7 @@
                 "matcher",
                 "tests"
             ],
-            "time": "2014-09-30 14:06:49"
+            "time": "2014-11-11 21:08:45"
         },
         {
             "name": "coduo/php-to-string",
@@ -208,6 +209,58 @@
             ],
             "description": "Adds new features to TuTu twig templates engine.",
             "time": "2014-07-26 13:35:49"
+        },
+        {
+            "name": "doctrine/lexer",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/lexer.git",
+                "reference": "2f708a85bb3aab5d99dab8be435abd73e0b18acb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/lexer/zipball/2f708a85bb3aab5d99dab8be435abd73e0b18acb",
+                "reference": "2f708a85bb3aab5d99dab8be435abd73e0b18acb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\Common\\Lexer\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com",
+                    "homepage": "http://www.instaclick.com"
+                },
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Johannes Schmitt",
+                    "email": "schmittjoh@gmail.com",
+                    "homepage": "https://github.com/schmittjoh",
+                    "role": "Developer of wrapped JMSSerializerBundle"
+                }
+            ],
+            "description": "Base library for a lexer that can be used in Top-Down, Recursive Descent Parsers.",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "lexer",
+                "parser"
+            ],
+            "time": "2013-01-12 18:59:04"
         },
         {
             "name": "fzaninotto/faker",

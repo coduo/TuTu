@@ -14,7 +14,7 @@
         "symfony/class-loader": "~2.3",
         "symfony/yaml": "~2.3",
         "twig/twig": "1.*",
-        "coduo/php-matcher": "1.0.*",
+        "coduo/php-matcher": "1.1.*",
         "coduo/tutu-faker-extension": "1.0.*@dev",
         "coduo/tutu-twig-extension": "1.0.*@dev"
     },
