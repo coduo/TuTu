@@ -1,0 +1,30 @@
+{
+    "name": "coduo/tutu-core",
+    "license": "MIT",
+    "type": "project",
+    "description": "Core of TuTu - Flexible HTTP server mocking tool in PHP.",
+    "autoload": {
+        "psr-0": { "Coduo\\TuTu\\": "" }
+    },
+    "require": {
+        "php": ">=5.4.0",
+        "symfony/http-kernel": "~2.3",
+        "symfony/options-resolver": "~2.3",
+        "symfony/event-dispatcher": "~2.3",
+        "symfony/class-loader": "~2.3",
+        "symfony/yaml": "~2.3",
+        "twig/twig": "1.*",
+        "coduo/php-matcher": "1.0.*"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "2.0.*"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}

@@ -27,6 +27,9 @@
         "symfony/process": "~2.3",
         "bossa/phpspec2-expect": "dev-master"
     },
+    "replace": {
+        "coduo/tutu-core": "self.version"
+    },
     "config": {
         "bin-dir": "bin"
     },

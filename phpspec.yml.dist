@@ -1,0 +1,2 @@
+suites:
+    TuTuCore : { namespace: Coduo, spec_path: src/Coduo/TuTu }
