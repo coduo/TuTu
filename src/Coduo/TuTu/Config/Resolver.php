@@ -34,7 +34,7 @@ class Resolver
 
     /**
      * @param Request $request
-     * @return null
+     * @return Element|null
      */
     public function resolveConfigElement(Request $request)
     {
