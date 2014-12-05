@@ -126,7 +126,10 @@ class Kernel implements HttpKernelInterface
 
             if (is_array($options['globals'])) {
                 foreach ($options['globals'] as $name => $value) {
-                    $twig->addGlobal($name, $value);
+                    $twig->addGlobal(
+                        $name,
+                        $this->getValue($value)
+                    );
                 }
             }
 
@@ -299,5 +302,31 @@ class Kernel implements HttpKernelInterface
         );
 
         return $event->getRequest();
+    }
+
+
+    /**
+     * If value is valid string between "%" characters then it might be a parameter
+     * so we need to try take it from container.
+     *
+     * @param $value
+     * @return mixed
+     */
+    private function getValue($value)
+    {
+        if (!is_string($value)) {
+            return $value;
+        }
+
+        if ($value[0] != '%' || $value[strlen($value) - 1] != '%')  {
+            return $value;
+        }
+
+        $parameter = trim($value, '%');
+        if ($this->container->hasParameter($parameter)) {
+            return $this->container->getParameter($parameter);
+        }
+
+        return $value;
     }
 }
