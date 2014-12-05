@@ -113,12 +113,22 @@ class Kernel implements HttpKernelInterface
         });
 
         $this->container->setStaticDefinition('twig' ,function ($container) {
-            $defaultOptions = ['cache' => $container->getParameter('tutu.root_path') . '/var/twig'];
+            $defaultOptions = [
+                'cache' => $container->getParameter('tutu.root_path') . '/var/twig',
+                'globals' => []
+            ];
+
             $options = $container->hasParameter('twig') && is_array($container->getParameter('twig'))
                 ? array_merge($defaultOptions, $container->getParameter('twig'))
                 : $defaultOptions;
 
             $twig = new \Twig_Environment($container->getService('twig_loader'), $options);
+
+            if (is_array($options['globals'])) {
+                foreach ($options['globals'] as $name => $value) {
+                    $twig->addGlobal($name, $value);
+                }
+            }
 
             return $twig;
         });
