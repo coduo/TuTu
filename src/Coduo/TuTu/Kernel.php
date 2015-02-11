@@ -247,7 +247,8 @@ class Kernel implements HttpKernelInterface
 
         if (array_key_exists('extensions', $config)) {
             foreach ($config['extensions'] as $extensionClass => $constructorArguments) {
-                $extension = $this->container->getService('extension.initializer')->initialize($extensionClass, $constructorArguments);
+                $arguments = $this->getExtensionArgumentsValues($constructorArguments);
+                $extension = $this->container->getService('extension.initializer')->initialize($extensionClass, $arguments);
 
                 $extension->load($this->container);
             }
@@ -304,6 +305,27 @@ class Kernel implements HttpKernelInterface
         return $event->getRequest();
     }
 
+    /**
+     * @param $arguments
+     * @return array|mixed|void
+     */
+    private function getExtensionArgumentsValues($arguments)
+    {
+        if (is_null($arguments)) {
+            return ;
+        }
+
+        if (is_array($arguments)) {
+            $argumentsWithValues = [];
+            foreach ($arguments as $name => $value) {
+                $argumentsWithValues[$name] = $this->getValue($value);
+            }
+
+            return $argumentsWithValues;
+        }
+
+        return $this->getValue($arguments);
+    }
 
     /**
      * If value is valid string between "%" characters then it might be a parameter
