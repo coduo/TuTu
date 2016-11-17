@@ -200,7 +200,7 @@ class TutuContext extends RawMinkContext implements SnippetAcceptingContext
     public function responseStatusCodeShouldBe($expectedStatus)
     {
         $status = $this->getSession()->getStatusCode();
-        if ($status !== $expectedStatus) {
+        if ($status !== (int)$expectedStatus) {
             throw new \RuntimeException(sprintf("Status %d is not equal to %d.", $status, (int) $expectedStatus));
         }
     }
