@@ -32,7 +32,7 @@ Feature: Create response when cant match request
     Then response status code should be 500
     And the response content should be equal to:
     """
-    There was a internal server error with message: Unknown tag name "rwqrqwr" in "Hello {% rwqrqwr %}" at line 1
+    There was a internal server error with message: Unknown "rwqrqwr" tag in "Hello {% rwqrqwr %}" at line 1.
     """
     And response should have following hedaers:
       | Name        | Value    |
