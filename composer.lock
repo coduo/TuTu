@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ba0998be2ad3747da94d25f8f4ecd39d",
-    "content-hash": "3c4ee2ac9bf7fc65821333227fc7d89e",
+    "hash": "ca6c3bf453e989337f0c5d94511f40bd",
+    "content-hash": "978c5683529755718f0163924c31df1d",
     "packages": [
         {
             "name": "coduo/php-matcher",
