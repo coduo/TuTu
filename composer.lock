@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "25cfd3f7b3757d0f99a1cec710a7f945",
-    "content-hash": "87082fb65457e5320572f43ee33fd274",
+    "hash": "ba0998be2ad3747da94d25f8f4ecd39d",
+    "content-hash": "3c4ee2ac9bf7fc65821333227fc7d89e",
     "packages": [
         {
             "name": "coduo/php-matcher",
@@ -123,34 +123,34 @@
         },
         {
             "name": "coduo/tutu-faker-extension",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/coduo/tutu-faker-extension.git",
-                "reference": "3cd2bfca175f8ca736a1a45954ed7073f9072abd"
+                "reference": "51b08c2036426d907e2a2b68528d8157791b7f17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coduo/tutu-faker-extension/zipball/3cd2bfca175f8ca736a1a45954ed7073f9072abd",
-                "reference": "3cd2bfca175f8ca736a1a45954ed7073f9072abd",
+                "url": "https://api.github.com/repos/coduo/tutu-faker-extension/zipball/51b08c2036426d907e2a2b68528d8157791b7f17",
+                "reference": "51b08c2036426d907e2a2b68528d8157791b7f17",
                 "shasum": ""
             },
             "require": {
                 "fzaninotto/faker": "~1.0",
-                "php": ">=5.4.0",
+                "php": ">=5.5.0",
                 "twig/twig": "1.*"
             },
             "require-dev": {
                 "behat/behat": "3.0.*",
-                "behat/mink-extension": "~2.0@dev",
-                "behat/mink-goutte-driver": "~1.0@dev",
-                "bossa/phpspec2-expect": "dev-master",
-                "coduo/tutu": "1.0.*@dev"
+                "behat/mink-extension": "~2.0",
+                "behat/mink-goutte-driver": "~1.0",
+                "bossa/phpspec2-expect": "~1.0",
+                "coduo/tutu": "~1.0"
             },
             "type": "project",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "autoload": {
@@ -163,38 +163,38 @@
                 "MIT"
             ],
             "description": "This extensions integrates fzaninotto/faker with TuTu.",
-            "time": "2014-07-26 14:22:11"
+            "time": "2016-11-20 17:19:10"
         },
         {
             "name": "coduo/tutu-twig-extension",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/coduo/tutu-twig-extension.git",
-                "reference": "129543db25a50cd7bbdf67707dc9da0d64f2a6be"
+                "reference": "a9193b7c95025c92633c95f0f8275867acfd6fb8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coduo/tutu-twig-extension/zipball/129543db25a50cd7bbdf67707dc9da0d64f2a6be",
-                "reference": "129543db25a50cd7bbdf67707dc9da0d64f2a6be",
+                "url": "https://api.github.com/repos/coduo/tutu-twig-extension/zipball/a9193b7c95025c92633c95f0f8275867acfd6fb8",
+                "reference": "a9193b7c95025c92633c95f0f8275867acfd6fb8",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4.0",
+                "php": ">=5.5.0",
                 "twig/twig": "1.*"
             },
             "require-dev": {
                 "behat/behat": "3.0.*",
-                "behat/mink-extension": "~2.0@dev",
-                "behat/mink-goutte-driver": "~1.0@dev",
-                "bossa/phpspec2-expect": "dev-master",
-                "coduo/tutu": "1.0.*@dev",
-                "coduo/tutu-faker-extension": "1.0.*@dev"
+                "behat/mink-extension": "~2.0",
+                "behat/mink-goutte-driver": "~1.0",
+                "bossa/phpspec2-expect": "~1.0",
+                "coduo/tutu": "1.0.*",
+                "coduo/tutu-faker-extension": "1.0.*"
             },
             "type": "project",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "autoload": {
@@ -207,7 +207,7 @@
                 "MIT"
             ],
             "description": "Adds new features to TuTu twig templates engine.",
-            "time": "2014-07-26 13:35:49"
+            "time": "2016-11-20 17:21:19"
         },
         {
             "name": "doctrine/lexer",
@@ -1580,25 +1580,26 @@
         },
         {
             "name": "behat/mink-goutte-driver",
-            "version": "dev-master",
+            "version": "v1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/minkphp/MinkGoutteDriver.git",
-                "reference": "7a4b2d49511865e23d61463514fa2754d42ec658"
+                "reference": "8b9ad6d2d95bc70b840d15323365f52fcdaea6ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minkphp/MinkGoutteDriver/zipball/7a4b2d49511865e23d61463514fa2754d42ec658",
-                "reference": "7a4b2d49511865e23d61463514fa2754d42ec658",
+                "url": "https://api.github.com/repos/minkphp/MinkGoutteDriver/zipball/8b9ad6d2d95bc70b840d15323365f52fcdaea6ca",
+                "reference": "8b9ad6d2d95bc70b840d15323365f52fcdaea6ca",
                 "shasum": ""
             },
             "require": {
+                "behat/mink": "~1.6@dev",
                 "behat/mink-browserkit-driver": "~1.2@dev",
                 "fabpot/goutte": "~1.0.4|~2.0|~3.1",
                 "php": ">=5.3.1"
             },
             "require-dev": {
-                "mink/driver-testsuite": "dev-master"
+                "symfony/phpunit-bridge": "~2.7|~3.0"
             },
             "type": "mink-driver",
             "extra": {
@@ -1630,7 +1631,7 @@
                 "headless",
                 "testing"
             ],
-            "time": "2016-10-14 20:19:06"
+            "time": "2016-03-05 09:04:22"
         },
         {
             "name": "behat/transliterator",
@@ -3205,12 +3206,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "coduo/tutu-faker-extension": 20,
-        "coduo/tutu-twig-extension": 20,
-        "behat/mink-extension": 20,
-        "behat/mink-goutte-driver": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
