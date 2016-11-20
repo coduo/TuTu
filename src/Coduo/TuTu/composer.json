@@ -11,24 +11,24 @@
     },
     "target-dir": "Coduo/TuTu",
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.5.0",
         "symfony/http-kernel": "~2.3",
         "symfony/options-resolver": "~2.3",
         "symfony/event-dispatcher": "~2.3",
         "symfony/class-loader": "~2.3",
         "symfony/yaml": "~2.3",
         "twig/twig": "1.*",
-        "coduo/php-matcher": "1.1.*"
+        "coduo/php-matcher": "2.1.*"
     },
     "require-dev": {
-        "phpspec/phpspec": "2.0.*"
+        "phpspec/phpspec": "2.4.*"
     },
     "config": {
         "bin-dir": "bin"
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0.x-dev"
+            "dev-master": "2.0.x-dev"
         }
     }
 }
