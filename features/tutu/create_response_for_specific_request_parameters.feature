@@ -39,7 +39,7 @@ Feature: Create response for specific request parameters
       request:
         path: /request
         query:
-          param: @string@
+          param: "@string@"
       response:
         content: "Hello Foo"
 
@@ -91,7 +91,7 @@ Feature: Create response for specific request parameters
       request:
         path: /request
         request:
-          param: @string@
+          param: "@string@"
       response:
         content: "Hello Foo"
 

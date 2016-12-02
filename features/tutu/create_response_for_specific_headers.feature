@@ -41,7 +41,7 @@ Feature: Create response for specific headers
       request:
         path: /request
         headers:
-          Hello: @string@
+          Hello: "@string@"
       response:
         content: "Hello Foo"
 

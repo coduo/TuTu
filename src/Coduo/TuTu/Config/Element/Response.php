@@ -72,11 +72,9 @@ class Response
     {
         $configResolver = new OptionsResolver();
         $configResolver->setDefaults(['content' => '', 'status' => 200, 'headers' => []]);
-        $configResolver->setAllowedTypes([
-            'content' => 'string',
-            'status' => 'integer',
-            'headers' => 'array',
-        ]);
+        $configResolver->setAllowedTypes('content', 'string');
+        $configResolver->setAllowedTypes('status', 'integer');
+        $configResolver->setAllowedTypes('headers', 'array');
 
         return $configResolver;
     }

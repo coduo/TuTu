@@ -8,23 +8,23 @@
     },
     "require": {
         "php": ">=5.5.0",
-        "symfony/http-kernel": "~2.3",
-        "symfony/options-resolver": "~2.3",
-        "symfony/event-dispatcher": "~2.3",
-        "symfony/class-loader": "~2.3",
-        "symfony/yaml": "~2.3",
+        "symfony/http-kernel": "~3.0",
+        "symfony/options-resolver": "~3.0",
+        "symfony/event-dispatcher": "~3.0",
+        "symfony/class-loader": "~3.0",
+        "symfony/yaml": "~3.0",
         "twig/twig": "1.*",
         "coduo/php-matcher": "2.1.*",
         "coduo/tutu-faker-extension": "1.0.*",
         "coduo/tutu-twig-extension": "1.0.*"
     },
     "require-dev": {
-        "behat/behat": "3.0.*",
+        "behat/behat": "3.*",
         "behat/mink-extension": "~2.0",
         "behat/mink-goutte-driver": "~1.0",
         "phpspec/phpspec": "2.4.*",
-        "symfony/filesystem": "~2.3",
-        "symfony/process": "~2.3",
+        "symfony/filesystem": "~3.0",
+        "symfony/process": "~3.0",
         "bossa/phpspec2-expect": "~1.0"
     },
     "replace": {

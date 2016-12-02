@@ -37,7 +37,7 @@ Feature: Create echo response
       request:
         path: /hello/world
       response:
-        content: @resources/hello_world.html.twig
+        content: "@resources/hello_world.html.twig"
     """
     And there is a config file "config.yml" with following content:
     """
