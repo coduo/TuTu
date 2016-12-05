@@ -216,14 +216,12 @@ class Request
             'headers' => [],
             'body' => ''
         ]);
-        $configResolver->setAllowedTypes([
-            'path' => 'string',
-            'methods' => 'array',
-            'request' => 'array',
-            'query' => 'array',
-            'headers' => 'array',
-            'body' => 'string'
-        ]);
+        $configResolver->setAllowedTypes('path', 'string');
+        $configResolver->setAllowedTypes('methods', 'array');
+        $configResolver->setAllowedTypes('request', 'array');
+        $configResolver->setAllowedTypes('query', 'array');
+        $configResolver->setAllowedTypes('headers', 'array');
+        $configResolver->setAllowedTypes('body', 'string');
 
         return $configResolver;
     }

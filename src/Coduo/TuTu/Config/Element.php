@@ -76,10 +76,8 @@ final class Element
         $configResolver = new OptionsResolver();
         $configResolver->setRequired(['request']);
         $configResolver->setDefaults(['response' => []]);
-        $configResolver->setAllowedTypes([
-            'request' => 'array',
-            'response' => 'array',
-        ]);
+        $configResolver->setAllowedTypes('request', 'array');
+        $configResolver->setAllowedTypes('response', 'array');
 
         return $configResolver;
     }

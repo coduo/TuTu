@@ -13,7 +13,7 @@ Feature: Create response from external file
       request:
         path: /hello/world
       response:
-        content: @resources/hello_world.twig.html
+        content: "@resources/hello_world.twig.html"
     """
     And there is a resource file "hello_world.twig.html" with following content
     """
